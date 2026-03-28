@@ -21,8 +21,11 @@
               {{ $dateHuman := .Date | time.Format ":date_long" }}
               <time datetime="{{ $dateMachine }}">{{ $dateHuman }}</time>
             </div>
-            {{ with .Summary }}
-              <div class="post-summary">{{ . }}</div>
+            {{ with .Content }}
+              {{ $paragraphs := findRE `<p>(.|\n)*?</p>` . }}
+              {{ with index $paragraphs 0 }}
+                <div class="post-summary">{{ . | plainify | truncate 150 }}</div>
+              {{ end }}
             {{ end }}
             {{ with .GetTerms "tags" }}
               <div class="tags">
