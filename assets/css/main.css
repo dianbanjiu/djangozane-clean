@@ -665,6 +665,52 @@ main {
   color: var(--accent) !important;
 }
 
+/* ===== Pagination ===== */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.pagination-link {
+  display: inline-block;
+  padding: 0.5rem 1.2rem;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: var(--bg);
+  box-shadow: var(--shadow-btn);
+  transition: all 0.2s ease;
+}
+
+.pagination-link:hover:not(.disabled) {
+  color: var(--accent);
+  box-shadow: var(--shadow-btn-hover);
+  transform: translateY(-1px);
+}
+
+.pagination-link:active:not(.disabled) {
+  box-shadow: var(--shadow-btn-active);
+  transform: translateY(0);
+}
+
+.pagination-link.disabled {
+  opacity: 0.4;
+  cursor: default;
+  pointer-events: none;
+}
+
+.pagination-info {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  min-width: 4rem;
+  text-align: center;
+}
+
 /* ===== Footer ===== */
 .site-footer {
   padding: 2rem 0;

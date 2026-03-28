@@ -6,8 +6,8 @@
     {{ end }}
   </section>
 
-  {{ $pages := site.RegularPages }}
-  {{ with $pages }}
+  {{ $paginator := .Paginate site.RegularPages }}
+  {{ with $paginator.Pages }}
     <section>
       <h2 class="section-title">Latest Posts</h2>
       <div class="post-grid">
@@ -34,6 +34,7 @@
           </article>
         {{ end }}
       </div>
+      {{ partial "pagination.html" $ }}
     </section>
   {{ end }}
 {{ end }}

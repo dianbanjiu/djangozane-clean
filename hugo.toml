@@ -1,6 +1,7 @@
 baseURL = 'https://example.org/'
 languageCode = 'en-US'
 title = 'DjangoZane'
+paginate = 10
 
 [menus]
   [[menus.main]]

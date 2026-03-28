@@ -6,7 +6,8 @@
     {{ end }}
   </section>
 
-  {{ with .Pages }}
+  {{ $paginator := .Paginate .Pages }}
+  {{ with $paginator.Pages }}
     <div class="post-grid">
       {{ range . }}
         <article class="card post-card">
@@ -31,5 +32,6 @@
         </article>
       {{ end }}
     </div>
+    {{ partial "pagination.html" $ }}
   {{ end }}
 {{ end }}
