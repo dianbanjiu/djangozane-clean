@@ -473,34 +473,17 @@ main {
   border-top: 1px solid var(--border);
 }
 
-/* ===== Taxonomy Page ===== */
-.taxonomy-list {
+/* ===== Tag Cloud (wordcloud2) ===== */
+.tag-cloud-canvas-wrapper {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
 }
 
-.taxonomy-item {
-  padding: 0.5rem 1.2rem;
-  border-radius: var(--radius-md);
-  background: var(--card-bg);
-  box-shadow: var(--shadow-out);
-  font-weight: 500;
-  transition: all 0.2s ease;
-}
-
-.taxonomy-item:hover {
-  box-shadow: var(--shadow-out-hover);
-  transform: translateY(-2px);
-  color: var(--accent);
-}
-
-.taxonomy-item a {
-  color: var(--text);
-}
-
-.taxonomy-item:hover a {
-  color: var(--accent);
+.tag-cloud-canvas-wrapper canvas {
+  display: block;
+  max-width: 100%;
 }
 
 /* ===== Search (Pagefind) ===== */

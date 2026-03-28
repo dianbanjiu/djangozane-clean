@@ -7,12 +7,95 @@
   </section>
 
   {{ with .Pages }}
-    <div class="taxonomy-list">
-      {{ range . }}
-        <div class="taxonomy-item">
-          <a href="{{ .RelPermalink }}">{{ .LinkTitle }} ({{ .Pages.Len }})</a>
-        </div>
-      {{ end }}
+    <div class="tag-cloud-canvas-wrapper card">
+      <canvas id="tag-cloud-canvas"></canvas>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/wordcloud@1/src/wordcloud2.js"></script>
+    <script>
+      (function () {
+        var tags = [
+          {{- range . -}}
+            [{{ .LinkTitle | jsonify }}, {{ .Pages.Len }}, {{ .RelPermalink | jsonify }}],
+          {{- end -}}
+        ];
+
+        var canvas = document.getElementById('tag-cloud-canvas');
+        var wrapper = canvas.parentElement;
+
+        function isDark() {
+          return document.documentElement.getAttribute('data-theme') === 'dark';
+        }
+
+        function getColors() {
+          var style = getComputedStyle(document.documentElement);
+          return {
+            accent: style.getPropertyValue('--accent').trim(),
+            accentEnd: style.getPropertyValue('--accent-end').trim(),
+            text: style.getPropertyValue('--text').trim(),
+            textSecondary: style.getPropertyValue('--text-secondary').trim()
+          };
+        }
+
+        function render() {
+          var w = wrapper.clientWidth;
+          var h = Math.max(360, Math.min(w * 0.6, 500));
+          canvas.width = w * 2;
+          canvas.height = h * 2;
+          canvas.style.width = w + 'px';
+          canvas.style.height = h + 'px';
+
+          var colors = getColors();
+          var palette = [colors.accent, colors.accentEnd, colors.text, colors.textSecondary];
+
+          var maxCount = Math.max.apply(null, tags.map(function (t) { return t[1]; }));
+          var minSize = 14;
+          var maxSize = Math.max(32, w / 12);
+          var list = tags.map(function (t) {
+            var size = maxCount > 1
+              ? minSize + (t[1] - 1) / (maxCount - 1) * (maxSize - minSize)
+              : (minSize + maxSize) / 2;
+            return [t[0], size * 2];
+          });
+
+          WordCloud(canvas, {
+            list: list,
+            gridSize: 8,
+            weightFactor: 1,
+            fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
+            fontWeight: 600,
+            color: function () {
+              return palette[Math.floor(Math.random() * palette.length)];
+            },
+            rotateRatio: 0.3,
+            rotationSteps: 2,
+            backgroundColor: 'transparent',
+            drawOutOfBound: false,
+            shrinkToFit: true,
+            click: function (item) {
+              var tag = tags.find(function (t) { return t[0] === item[0]; });
+              if (tag) window.location.href = tag[2];
+            },
+            hover: function (item) {
+              canvas.style.cursor = item ? 'pointer' : 'default';
+            }
+          });
+        }
+
+        render();
+
+        var resizeTimer;
+        window.addEventListener('resize', function () {
+          clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(render, 200);
+        });
+
+        var observer = new MutationObserver(function (mutations) {
+          mutations.forEach(function (m) {
+            if (m.attributeName === 'data-theme') render();
+          });
+        });
+        observer.observe(document.documentElement, { attributes: true });
+      })();
+    </script>
   {{ end }}
 {{ end }}
