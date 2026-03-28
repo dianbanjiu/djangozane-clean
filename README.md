@@ -2,6 +2,8 @@
 
 一个基于 **Catppuccin** 配色的 Hugo 新拟态（Neumorphism）主题，简洁、现代、响应式。
 
+**在线演示**：[blog-demo.djangozane.com](https://blog-demo.djangozane.com)
+
 ## 特点
 
 - **Catppuccin 配色** — 亮色模式使用 Latte，暗色模式使用 Mocha，视觉柔和舒适
