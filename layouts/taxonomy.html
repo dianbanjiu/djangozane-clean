@@ -15,7 +15,7 @@
       (function () {
         var tags = [
           {{- range . -}}
-            [{{ .LinkTitle | jsonify }}, {{ .Pages.Len }}, {{ .RelPermalink | jsonify }}],
+            ["{{ .LinkTitle | safeJS }}", {{ .Pages.Len }}, "{{ .RelPermalink | safeJS }}"],
           {{- end -}}
         ];
 
