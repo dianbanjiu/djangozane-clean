@@ -18,6 +18,10 @@ title = 'DjangoZane'
     pageRef = '/tags'
     weight = 30
 
+[params]
+  [params.search]
+    enabled = true
+
 [module]
   [module.hugoVersion]
     extended = false

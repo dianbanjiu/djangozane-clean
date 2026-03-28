@@ -1,0 +1,31 @@
+{{ define "main" }}
+  <section class="hero">
+    <h1 class="hero-title">{{ .Title }}</h1>
+  </section>
+  <div id="search" class="search-wrapper">
+    <p id="search-loading" style="text-align:center;color:var(--text-secondary);padding:2rem 0;">
+      搜索索引加载中…
+    </p>
+  </div>
+  <link rel="stylesheet" href="/pagefind/pagefind-ui.css">
+  <script>
+    (function () {
+      var script = document.createElement('script');
+      script.src = '/pagefind/pagefind-ui.js';
+      script.onload = function () {
+        var el = document.getElementById('search-loading');
+        if (el) el.remove();
+        new PagefindUI({
+          element: '#search',
+          showSubResults: true,
+          showImages: false
+        });
+      };
+      script.onerror = function () {
+        var el = document.getElementById('search-loading');
+        if (el) el.remove();
+      };
+      document.head.appendChild(script);
+    })();
+  </script>
+{{ end }}

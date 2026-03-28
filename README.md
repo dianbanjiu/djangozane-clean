@@ -10,7 +10,8 @@
 - **响应式布局** — 桌面端双列文章网格，移动端自动切换为单列，小屏幕下导航折叠为汉堡菜单
 - **零依赖** — 无 Tailwind / Bootstrap / npm，纯 CSS + 原生 JS，轻量快速
 - **Hugo 资源管道** — CSS / JS 自动 minify、fingerprint，开箱即用的缓存优化
-- **完整页面模板** — 首页、文章列表、文章详情、标签总览、标签归档、404 页面
+- **Pagefind 全文搜索** — 基于 Pagefind 的静态搜索，通过配置项一键开关
+- **完整页面模板** — 首页、文章列表、文章详情、标签总览、标签归档、搜索、404 页面
 
 ## 要求
 
@@ -98,11 +99,42 @@ title = '我的博客'
     pageRef = '/tags'
     weight = 30
 
+[params]
+  [params.search]
+    enabled = true
+
 [module]
   [module.hugoVersion]
     extended = false
     min = '0.146.0'
 ```
+
+### 搜索配置
+
+主题集成了 [Pagefind](https://pagefind.app/) 静态全文搜索。通过 `params.search.enabled` 控制开关：
+
+```toml
+[params]
+  [params.search]
+    enabled = true   # 设为 false 可关闭搜索功能
+```
+
+启用后需在构建站点后运行 Pagefind 索引：
+
+```bash
+hugo
+npx pagefind --site public
+```
+
+也可以在开发时使用：
+
+```bash
+hugo server -D
+# 另一个终端
+npx pagefind --site public
+```
+
+> 启用后导航栏会自动出现搜索图标按钮，无需手动添加菜单项。
 
 ### 菜单配置
 
@@ -147,6 +179,7 @@ tags = ['Hugo', '教程']
 │   └── js/main.js           # 主题切换 + 移动端菜单
 ├── content/
 │   ├── _index.md            # 首页内容
+│   ├── search.md            # 搜索页面
 │   └── posts/               # 文章目录
 ├── layouts/
 │   ├── baseof.html          # HTML 骨架
@@ -155,6 +188,7 @@ tags = ['Hugo', '教程']
 │   ├── section.html         # 分区列表
 │   ├── taxonomy.html        # 标签/分类总览
 │   ├── term.html            # 单个标签下的文章列表
+│   ├── search.html          # 搜索页面（Pagefind）
 │   ├── 404.html             # 404 页面
 │   └── _partials/           # 可复用片段
 │       ├── head.html
