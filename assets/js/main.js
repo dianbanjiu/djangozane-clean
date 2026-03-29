@@ -38,6 +38,37 @@
         });
       });
     });
+    // 移动端文章标题切换
+    (function () {
+      var mq = window.matchMedia("(max-width: 480px)");
+      var siteTitle = document.getElementById("site-title");
+      var articleEl = document.getElementById("site-title-article");
+      var articleH1 = document.querySelector(".article-header h1");
+      if (!siteTitle || !articleEl || !articleH1) return;
+
+      articleEl.textContent = articleH1.textContent;
+      var observer = null;
+
+      function setup() {
+        if (!mq.matches) {
+          if (observer) { observer.disconnect(); observer = null; }
+          siteTitle.classList.remove("show-article");
+          return;
+        }
+        if (observer) return;
+        observer = new IntersectionObserver(
+          function (entries) {
+            siteTitle.classList.toggle("show-article", !entries[0].isIntersecting);
+          },
+          { threshold: 0 }
+        );
+        observer.observe(articleH1);
+      }
+
+      setup();
+      mq.addEventListener("change", setup);
+    })();
+
     const toggle = document.getElementById("theme-toggle");
     if (toggle) {
       toggle.addEventListener("click", function () {

@@ -1,9 +1,10 @@
 <div class="container">
-  <div class="site-title">
-    <a href="{{ "/" | relURL }}">{{ site.Title }}</a>
+  <div class="site-title" id="site-title">
+    <span class="site-title-brand"><a href="{{ "/" | relURL }}">{{ site.Title }}</a></span>
+    <span class="site-title-article" id="site-title-article" aria-hidden="true"></span>
   </div>
   <div class="header-right">
-    {{ partial "menu.html" (dict "menuID" "main" "page" .) }}
+    {{ partial "menu.html" (dict "menuID" "main" "page" . "search" site.Params.search.enabled) }}
     <button class="menu-toggle" id="menu-toggle" aria-label="{{ i18n "toggle_menu" }}" aria-expanded="false">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
         <line x1="3" y1="6" x2="21" y2="6"/>
@@ -12,7 +13,7 @@
       </svg>
     </button>
     {{- if site.Params.search.enabled }}
-      <a class="search-toggle" href="{{ "search" | relURL }}" aria-label="{{ i18n "search" }}">
+      <a class="search-toggle search-toggle-inline" href="{{ "search" | relURL }}" aria-label="{{ i18n "search" }}">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
           <circle cx="11" cy="11" r="8"/>
           <line x1="21" y1="21" x2="16.65" y2="16.65"/>
