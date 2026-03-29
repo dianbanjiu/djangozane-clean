@@ -24,6 +24,20 @@
   applyTheme(getEffectiveTheme());
 
   document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".code-block .copy-btn").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var block = btn.closest(".code-block");
+        var code = block.querySelector("code");
+        if (!code) return;
+        var text = code.textContent;
+        navigator.clipboard.writeText(text).then(function () {
+          btn.classList.add("copied");
+          setTimeout(function () {
+            btn.classList.remove("copied");
+          }, 2000);
+        });
+      });
+    });
     const toggle = document.getElementById("theme-toggle");
     if (toggle) {
       toggle.addEventListener("click", function () {
