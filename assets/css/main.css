@@ -3,10 +3,10 @@
   --bg: #eff1f5;
   --bg-secondary: #e6e9ef;
   --card-bg: #dce0e8;
-  --text: #4c4f69;
-  --text-secondary: #6c6f85;
-  --accent: #7287fd;
-  --accent-end: #8839ef;
+  --text: #3c3f58;
+  --text-secondary: #5c5f75;
+  --accent: #5c6fec;
+  --accent-end: #7c2de0;
   --border: rgba(76, 79, 105, 0.1);
   --shadow-out: 6px 6px 12px rgba(140, 143, 161, 0.25), -6px -6px 12px rgba(255, 255, 255, 0.7);
   --shadow-out-sm: 3px 3px 6px rgba(140, 143, 161, 0.2), -3px -3px 6px rgba(255, 255, 255, 0.6);
@@ -40,7 +40,7 @@
 }
 
 /* ===== Syntax Highlight — Catppuccin Latte (light) ===== */
-.chroma { color:#4c4f69; }
+.chroma { color:#3c3f58; }
 .chroma .err { color:#d20f39 }
 .chroma .lnlinks { outline:none;text-decoration:none;color:inherit }
 .chroma .lntd { vertical-align:top;padding:0;margin:0;border:0 }
