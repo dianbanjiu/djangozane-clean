@@ -32,7 +32,7 @@ paginate = 10
   [markup.highlight]
     codeFences = true
     guessSyntax = true
-    noClasses = true
+    noClasses = false
 
 [module]
   [module.hugoVersion]
