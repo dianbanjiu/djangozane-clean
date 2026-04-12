@@ -1,16 +1,15 @@
 {{ define "main" }}
   {{ partial "hero.html" . }}
 
-  {{ $paginator := .Paginate site.RegularPages }}
-  {{ if $paginator.Pages }}
+  {{ $latest := first 4 (sort site.RegularPages "Date" "desc") }}
+  {{ if $latest }}
     <section>
       <h2 class="section-title">{{ i18n "latest_posts" }}</h2>
       <div class="post-grid">
-        {{ range $paginator.Pages }}
+        {{ range $latest }}
           {{ partial "post-card.html" . }}
         {{ end }}
       </div>
-      {{ partial "pagination.html" $ }}
     </section>
   {{ else }}
     <p class="empty-state">{{ i18n "no_posts" }}</p>
