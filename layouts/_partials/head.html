@@ -1,12 +1,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#eff1f5">
+<meta name="theme-color" content="#ffffff">
 {{- with site.Params.favicon }}
 <link rel="icon" href="{{ . | relURL }}">
 {{- end }}
 <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ printf "%s | %s" .Title site.Title }}{{ end }}</title>
 <script>
-(function(){var k="djangozane-clean-theme",s=localStorage.getItem(k),t=s||((window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)?"dark":"light");document.documentElement.setAttribute("data-theme",t);var m=document.querySelector('meta[name="theme-color"]');if(m)m.content=t==="dark"?"#1e1e2e":"#eff1f5"})();
+(function(){var k="djangozane-clean-theme",s=localStorage.getItem(k),t=s||((window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)?"dark":"light");document.documentElement.setAttribute("data-theme",t);var m=document.querySelector('meta[name="theme-color"]');if(m)m.content=t==="dark"?"#0a0a0a":"#ffffff"})();
 </script>
 {{ partialCached "head/css.html" . }}
 {{ partialCached "head/js.html" . }}
