@@ -546,7 +546,9 @@ h3 {
 /* ===== Layout ===== */
 .container {
     width: 100%;
-    max-width: 720px;         /* Ollama narrow reading column */
+    max-width: 960px;         /* unified reading column across ALL pages —
+                                 prevents width-jump when navigating between
+                                 list views and article detail */
     margin: 0 auto;
     padding: 0 1.5rem;
 }
@@ -1206,7 +1208,7 @@ main {
 
 /* ===== Search (Pagefind) ===== */
 .search-wrapper {
-    max-width: 720px;
+    max-width: 960px;
     margin: 0 auto;
     --pagefind-ui-scale: 1;
     --pagefind-ui-primary: var(--ink);
@@ -1648,33 +1650,165 @@ body.search-open {
     margin: 0;
 }
 
-/* ===== Background Image (preserved param, minimal treatment) ===== */
+/* ===== Background Image — Cohesive Glass Adaptation =====
+   When body has a background image, the chrome shifts into a unified
+   "glass panel over wallpaper" mode (think macOS notification center
+   or iOS Safari). The bg image only shows above the header, below the
+   footer, and on the left/right margins of the central reading panel.
+   Inside the panel, cards dissolve into a single coherent surface so
+   the whole page reads as ONE frosted column — never as scattered
+   patches against the photo. */
+
 body.has-bg-image {
     background-color: transparent;
 }
 
+/* Full-viewport soft tint to tame any image (light & dark aware) */
+body.has-bg-image::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: color-mix(in srgb, var(--canvas) 25%, transparent);
+    pointer-events: none;
+    z-index: -1;
+}
+
+[data-theme="dark"] body.has-bg-image::before {
+    background: color-mix(in srgb, #000000 40%, transparent);
+}
+
+/* Top glass strip — header */
 body.has-bg-image .site-header {
-    background: color-mix(in srgb, var(--canvas) 90%, transparent);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: color-mix(in srgb, var(--canvas) 72%, transparent);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
 }
 
-body.has-bg-image .card,
-body.has-bg-image .footer-card {
-    background: color-mix(in srgb, var(--surface-card) 90%, transparent);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+/* Main reading column = ONE cohesive frosted glass panel */
+body.has-bg-image main.container {
+    background: color-mix(in srgb, var(--canvas) 80%, transparent);
+    backdrop-filter: blur(24px) saturate(160%);
+    -webkit-backdrop-filter: blur(24px) saturate(160%);
+    border: 1px solid color-mix(in srgb, var(--hairline-strong) 40%, transparent);
+    border-radius: var(--radius-lg);
+    margin: 1.5rem auto;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding-top: 1.5rem;
 }
 
-body.has-bg-image .footer-card {
+@media (max-width: 768px) {
+    body.has-bg-image main.container {
+        /* width: calc + margin auto avoids the box-model trap of
+           "width: 100% + non-auto horizontal margin" which would push
+           the panel beyond the viewport and create horizontal scroll. */
+        width: calc(100% - 1.5rem);
+        margin: 0.75rem auto;
+        padding-left: 1.25rem;
+        padding-right: 1.25rem;
+        padding-top: 1rem;
+    }
+}
+
+/* Cards inside the glass column dissolve — no double-glass, no patchwork */
+body.has-bg-image main .card {
     background: transparent;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
 }
 
+body.has-bg-image main .card.post-card:hover {
+    background: color-mix(in srgb, var(--canvas) 35%, transparent);
+    border-color: var(--ink);
+}
+
+/* Article detail card: fully dissolve into the panel */
+body.has-bg-image main article.card:not(.post-card) {
+    background: transparent;
+    border: none;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* Tag-cloud wrapper card: dissolve too */
+body.has-bg-image main .tag-cloud-canvas-wrapper.card {
+    background: transparent;
+    border: none;
+}
+
+/* Code blocks remain visually distinct — they read as quoted terminals */
+body.has-bg-image .article-content .code-block,
+body.has-bg-image .article-content pre {
+    background: color-mix(in srgb, var(--surface-soft) 90%, transparent);
+}
+
+body.has-bg-image .article-content p code,
+body.has-bg-image .article-content li code {
+    background: color-mix(in srgb, var(--surface-soft) 88%, transparent);
+}
+
+/* Tag pills & pagination sit on the glass column — keep them lightly tinted */
+body.has-bg-image .tag {
+    background: color-mix(in srgb, var(--canvas) 60%, transparent);
+}
+
+body.has-bg-image .pagination-link {
+    background: color-mix(in srgb, var(--canvas) 60%, transparent);
+}
+
+body.has-bg-image .pagination-link:hover:not(.disabled) {
+    background: var(--ink);
+    color: var(--canvas);
+}
+
+/* Header chrome buttons sit on raw bg image — need stronger glass */
+body.has-bg-image .menu-toggle,
+body.has-bg-image .search-toggle,
+body.has-bg-image .theme-toggle,
+body.has-bg-image .nav-search-btn {
+    background: color-mix(in srgb, var(--canvas) 78%, transparent);
+    backdrop-filter: blur(14px) saturate(160%);
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
+    border-color: color-mix(in srgb, var(--hairline-strong) 80%, transparent);
+}
+
+body.has-bg-image .menu-toggle:hover,
+body.has-bg-image .search-toggle:hover,
+body.has-bg-image .theme-toggle:hover,
+body.has-bg-image .nav-search-btn:hover {
+    background: color-mix(in srgb, var(--canvas) 92%, transparent);
+    border-color: var(--ink);
+}
+
 body.has-bg-image .site-nav a:hover,
 body.has-bg-image .site-nav a.active {
-    background: color-mix(in srgb, var(--surface-soft) 85%, transparent);
+    background: color-mix(in srgb, var(--canvas) 80%, transparent);
+}
+
+/* Footer: copyright lives in a small floating glass pill */
+body.has-bg-image .site-footer .container {
+    /* keep the centered layout */
+}
+
+body.has-bg-image .footer-card {
+    background: color-mix(in srgb, var(--canvas) 65%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: var(--radius-full);
+    padding: 0.375rem 1rem;
+    display: inline-block;
+    color: var(--ink);
+}
+
+/* Mobile drawer when bg-image is active — popup UI prioritizes legibility */
+@media (max-width: 480px) {
+    body.has-bg-image .site-nav {
+        background: color-mix(in srgb, var(--canvas) 96%, transparent);
+        backdrop-filter: blur(24px) saturate(180%);
+        -webkit-backdrop-filter: blur(24px) saturate(180%);
+        border-top-color: color-mix(in srgb, var(--hairline-strong) 60%, transparent);
+        border-bottom-color: color-mix(in srgb, var(--hairline-strong) 60%, transparent);
+    }
 }
 
 /* ===== Responsive ===== */
