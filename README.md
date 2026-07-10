@@ -86,7 +86,7 @@ hugo server -D
 
 ```toml
 baseURL = 'https://example.org/'
-languageCode = 'zh-Hans'
+locale = 'zh-Hans'
 title = '我的博客'
 paginate = 10
 
@@ -142,9 +142,9 @@ paginate = 10
 
 ### 语言配置
 
-通过 `languageCode` 切换界面语言，内置三种翻译：
+通过 `locale` 切换界面语言，内置三种翻译：
 
-| `languageCode` | 语言 |
+| `locale` | 语言 |
 |---|---|
 | `zh-Hans` | 简体中文 |
 | `zh-Hant` | 繁体中文 |
