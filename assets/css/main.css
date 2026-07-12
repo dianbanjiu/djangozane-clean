@@ -844,6 +844,76 @@ main {
     border-left: none;
 }
 
+/* ===== Featured Projects ===== */
+.featured-projects {
+    margin-bottom: 2.5rem;
+}
+
+.featured-project-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.featured-project-card {
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card);
+    overflow: hidden;
+    transition:
+        border-color 0.15s ease,
+        background-color 0.15s ease;
+}
+
+.featured-project-card:hover {
+    border-color: var(--ink);
+}
+
+.featured-project-link {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    height: 100%;
+    color: inherit;
+    text-decoration: none;
+}
+
+.featured-project-image {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    background: var(--surface-soft);
+    border-bottom: 1px solid var(--hairline);
+}
+
+.featured-project-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-width: 0;
+    padding: 1rem;
+}
+
+.featured-project-title {
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--ink);
+    overflow-wrap: anywhere;
+}
+
+.featured-project-desc {
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--body);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
 /* ===== Post List (was grid) ===== */
 .post-grid {
     display: grid;
@@ -1742,6 +1812,15 @@ body.has-bg-image main .card {
     -webkit-backdrop-filter: none;
 }
 
+body.has-bg-image main .featured-project-card {
+    background: transparent;
+}
+
+body.has-bg-image main .featured-project-card:hover {
+    background: color-mix(in srgb, var(--canvas) 35%, transparent);
+    border-color: var(--ink);
+}
+
 body.has-bg-image main .card.post-card:hover {
     background: color-mix(in srgb, var(--canvas) 35%, transparent);
     border-color: var(--ink);
@@ -1875,6 +1954,10 @@ body.has-bg-image .footer-card {
     .post-card {
         padding: 1.25rem;
     }
+
+    .featured-project-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 @media (max-width: 480px) {
@@ -2004,6 +2087,14 @@ body.has-bg-image .footer-card {
 
     .post-card {
         padding: 1.25rem;
+    }
+
+    .featured-projects {
+        margin-bottom: 2rem;
+    }
+
+    .featured-project-body {
+        padding: 0.875rem;
     }
 
     /* ===== Article Page — Mobile: 移除卡片，最大化阅读宽度 ===== */

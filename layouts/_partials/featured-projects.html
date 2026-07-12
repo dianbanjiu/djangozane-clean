@@ -1,0 +1,44 @@
+{{- with site.Params.featuredProjects }}
+  {{- $projects := first 4 . -}}
+  {{- if $projects }}
+    <section class="featured-projects" aria-labelledby="featured-projects-title">
+      <h2 class="section-title" id="featured-projects-title">{{ i18n "featured_projects" }}</h2>
+      <div class="featured-project-grid">
+        {{- range $projects }}
+          {{- $title := .title | default .name -}}
+          {{- $href := .url | default .link -}}
+          {{- $image := .image | default .thumbnail -}}
+          {{- if and $title $href }}
+            {{- $isExternal := or (hasPrefix $href "http://") (hasPrefix $href "https://") -}}
+            {{- $projectHref := $href -}}
+            {{- if not $isExternal }}
+              {{- $projectHref = $href | relURL -}}
+            {{- end -}}
+            {{- $imageSrc := "" -}}
+            {{- with $image }}
+              {{- $imageIsExternal := or (hasPrefix . "http://") (hasPrefix . "https://") -}}
+              {{- if $imageIsExternal }}
+                {{- $imageSrc = . -}}
+              {{- else }}
+                {{- $imageSrc = . | relURL -}}
+              {{- end -}}
+            {{- end }}
+            <article class="featured-project-card">
+              <a class="featured-project-link" href="{{ $projectHref }}" aria-label="{{ $title }}">
+                {{- with $imageSrc }}
+                  <img class="featured-project-image" src="{{ . }}" alt="{{ $title }}" loading="lazy" decoding="async">
+                {{- end }}
+                <span class="featured-project-body">
+                  <span class="featured-project-title">{{ $title }}</span>
+                  {{- with .description }}
+                    <span class="featured-project-desc">{{ . }}</span>
+                  {{- end }}
+                </span>
+              </a>
+            </article>
+          {{- end }}
+        {{- end }}
+      </div>
+    </section>
+  {{- end }}
+{{- end }}

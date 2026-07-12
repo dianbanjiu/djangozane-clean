@@ -113,6 +113,11 @@ paginate = 10
   # logo = '/images/logo.png'
   # favicon = '/favicon.svg'
   # backgroundImage = '/bg.jpg'
+  # [params.featuredProjects]
+  #   title = '项目名称'
+  #   description = '项目简介'
+  #   image = '/images/project.jpg'
+  #   url = '/posts/project-intro/'
   [params.search]
     enabled = true
   [params.photoswipe]
@@ -137,6 +142,7 @@ paginate = 10
 | `logo` | 站点 Logo 图片路径（放在 `static/` 下） | 无，显示站点标题文字 |
 | `favicon` | 站点图标路径 | 无 |
 | `backgroundImage` | 全局背景图路径（放在 `static/` 下） | 无，使用纯色背景 |
+| `featuredProjects` | 首页推荐项目列表，最多显示 4 个 | 无 |
 | `search.enabled` | 是否启用 Pagefind 全文搜索 | `false` |
 | `photoswipe.enabled` | 是否启用图片灯箱 | `false` |
 
@@ -162,6 +168,26 @@ paginate = 10
 ```
 
 将图片放到站点的 `static/` 目录下。启用后 header、卡片、footer 等区域会自动添加毛玻璃半透明效果，保证内容可读性。不设置则使用默认纯色背景。
+
+### 首页推荐项目
+
+在 `[params]` 下添加 `[[params.featuredProjects]]` 条目即可在首页“最新文章”上方显示推荐项目，最多显示前 4 个。每个项目支持 `title`、`description`、`image` 和 `url`。
+
+```toml
+[[params.featuredProjects]]
+  title = '项目名称'
+  description = '项目简介'
+  image = '/images/project.jpg'
+  url = '/posts/project-intro/'
+
+[[params.featuredProjects]]
+  title = '外部项目'
+  description = '可以跳转到完整的 http 或 https 链接'
+  image = 'https://example.com/project-cover.jpg'
+  url = 'https://example.com/project'
+```
+
+`url` 支持完整的 `http`/`https` 链接，也支持站内文章路径；`image` 支持完整图片链接，也支持放在站点 `static/` 下的图片资源路径。
 
 ### 搜索配置
 

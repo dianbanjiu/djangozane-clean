@@ -33,6 +33,11 @@ paginate = 10
     enabled = true
   [params.photoswipe]
     enabled = true
+  [params.featuredProjects]
+  title = "Djangozane clean"
+  description = "简洁美观的hugo主题"
+  image = "https://cdn.pixabay.com/photo/2026/06/25/13/10/nunziog666-banff-10349707_1280.jpg"
+  url = "https://github.com/dianbanjiu/djangozane-clean"
 
 [markup]
   [markup.highlight]
