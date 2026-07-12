@@ -113,7 +113,7 @@ paginate = 10
   # logo = '/images/logo.png'
   # favicon = '/favicon.svg'
   # backgroundImage = '/bg.jpg'
-  # [params.featuredProjects]
+  # [params.featuredProjects]]
   #   title = '项目名称'
   #   description = '项目简介'
   #   image = '/images/project.jpg'
