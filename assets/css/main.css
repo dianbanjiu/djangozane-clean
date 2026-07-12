@@ -1232,6 +1232,7 @@ main {
 
 /* ===== Article Images ===== */
 .article-content img {
+    display: block;
     margin: 1.5rem 0;
     border: 1px solid var(--hairline);
     border-radius: var(--radius-lg);
@@ -1245,8 +1246,31 @@ main {
 
 .article-content a[data-pswp-width] {
     display: block;
+    margin: 1.5rem 0;
     text-decoration: none;
     border: none;
+}
+
+.article-content a[data-pswp-width] picture,
+.article-content picture img {
+    display: block;
+}
+
+.article-content a[data-pswp-width] img,
+.article-content .image-figure img {
+    margin: 0;
+}
+
+.article-content .image-figure {
+    margin: 1.5rem 0;
+}
+
+.article-content .image-figure figcaption {
+    margin-top: 0.625rem;
+    color: var(--mute);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    text-align: center;
 }
 
 .pswp {

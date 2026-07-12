@@ -1,0 +1,82 @@
+{{- $destination := .Destination -}}
+{{- $url := urls.Parse $destination -}}
+{{- $path := $url.Path -}}
+{{- $isRemote := or $url.Scheme (strings.HasPrefix $destination "//") -}}
+{{- $resource := false -}}
+
+{{- if and (not $isRemote) $path -}}
+  {{- $resourcePath := strings.TrimPrefix "/" $path -}}
+  {{- with .PageInner.Resources.GetMatch $path -}}
+    {{- $resource = . -}}
+  {{- else -}}
+    {{- with .PageInner.Resources.GetMatch $resourcePath -}}
+      {{- $resource = . -}}
+    {{- else -}}
+      {{- with resources.Get $resourcePath -}}
+        {{- $resource = . -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $isProcessableImage := and $resource (reflect.IsImageResourceProcessable $resource) -}}
+{{- $processable := and $isProcessableImage (ne $resource.MediaType.SubType "gif") -}}
+{{- $sizes := "(min-width: 768px) 720px, calc(100vw - 2rem)" -}}
+
+{{- if $processable -}}
+  {{- $displayWidth := $resource.Width -}}
+  {{- if gt $displayWidth 1280 -}}
+    {{- $displayWidth = 1280 -}}
+  {{- end -}}
+  {{- $candidateWidths := slice -}}
+  {{- range slice 480 768 1024 1280 1600 -}}
+    {{- if le . $resource.Width -}}
+      {{- $candidateWidths = $candidateWidths | append . -}}
+    {{- end -}}
+  {{- end -}}
+  {{- if not (in $candidateWidths $displayWidth) -}}
+    {{- $candidateWidths = $candidateWidths | append $displayWidth -}}
+  {{- end -}}
+
+  {{- $fallback := $resource.Resize (printf "%dx q82" $displayWidth) -}}
+  {{- $fallbackSet := slice -}}
+  {{- $webpSet := slice -}}
+  {{- range $candidateWidths -}}
+    {{- $fallbackItem := $resource.Resize (printf "%dx q82" .) -}}
+    {{- $webpItem := $resource.Resize (printf "%dx webp q78" .) -}}
+    {{- $fallbackSet = $fallbackSet | append (printf "%s %dw" $fallbackItem.RelPermalink .) -}}
+    {{- $webpSet = $webpSet | append (printf "%s %dw" $webpItem.RelPermalink .) -}}
+  {{- end -}}
+
+  {{- if .IsBlock -}}
+    <figure class="image-figure">
+      <a class="image-link" href="{{ $resource.RelPermalink }}" data-pswp-width="{{ $resource.Width }}" data-pswp-height="{{ $resource.Height }}" target="_blank" rel="noopener">
+        <picture>
+          <source type="image/webp" srcset="{{ delimit $webpSet ", " }}" sizes="{{ $sizes }}">
+          <img src="{{ $fallback.RelPermalink }}" srcset="{{ delimit $fallbackSet ", " }}" sizes="{{ $sizes }}" width="{{ $resource.Width }}" height="{{ $resource.Height }}" alt="{{ .PlainText }}" loading="lazy" decoding="async"{{ with .Title }} title="{{ . }}"{{ end }}>
+        </picture>
+      </a>
+      {{- with .Title }}
+        <figcaption>{{ . }}</figcaption>
+      {{- end }}
+    </figure>
+  {{- else -}}
+    <a class="image-link" href="{{ $resource.RelPermalink }}" data-pswp-width="{{ $resource.Width }}" data-pswp-height="{{ $resource.Height }}" target="_blank" rel="noopener"><picture><source type="image/webp" srcset="{{ delimit $webpSet ", " }}" sizes="{{ $sizes }}"><img src="{{ $fallback.RelPermalink }}" srcset="{{ delimit $fallbackSet ", " }}" sizes="{{ $sizes }}" width="{{ $resource.Width }}" height="{{ $resource.Height }}" alt="{{ .PlainText }}" loading="lazy" decoding="async"{{ with .Title }} title="{{ . }}"{{ end }}></picture></a>
+  {{- end -}}
+{{- else -}}
+  {{- $src := $destination -}}
+  {{- with $resource -}}
+    {{- $src = .RelPermalink -}}
+  {{- end -}}
+  {{- if .IsBlock -}}
+    <figure class="image-figure">
+      <img src="{{ $src | safeURL }}" alt="{{ .PlainText }}" loading="lazy" decoding="async"{{ with .Title }} title="{{ . }}"{{ end }}>
+      {{- with .Title }}
+        <figcaption>{{ . }}</figcaption>
+      {{- end }}
+    </figure>
+  {{- else -}}
+    <img src="{{ $src | safeURL }}" alt="{{ .PlainText }}" loading="lazy" decoding="async"{{ with .Title }} title="{{ . }}"{{ end }}>
+  {{- end -}}
+{{- end -}}
+{{- /* chomp trailing newline */ -}}
