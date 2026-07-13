@@ -33,6 +33,11 @@ paginate = 10
     enabled = true
   [params.photoswipe]
     enabled = true
+  [params.comments]
+    enabled = false
+    provider = "waline"
+    [params.comments.waline]
+      serverURL = ""
   [[params.featuredProjects]]
   title = "Djangozane clean"
   description = "简洁美观的hugo主题"

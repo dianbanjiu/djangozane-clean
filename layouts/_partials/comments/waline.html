@@ -1,0 +1,49 @@
+{{- $waline := site.Params.comments.waline -}}
+{{- $serverURL := strings.TrimSuffix "/" (default "" $waline.serverURL) -}}
+{{- if $serverURL -}}
+  {{- $cssURL := default "https://unpkg.com/@waline/client@v3/dist/waline.css" $waline.cssURL -}}
+  {{- $jsURL := default "https://unpkg.com/@waline/client@v3/dist/waline.js" $waline.jsURL -}}
+  <link rel="stylesheet" href="{{ $cssURL | safeURL }}">
+  {{- with resources.Get "css/comments.css" -}}
+    {{- if hugo.IsDevelopment -}}
+      <link rel="stylesheet" href="{{ .RelPermalink }}">
+    {{- else -}}
+      {{- with . | minify | fingerprint -}}
+        <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous">
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $locale := lower (or site.Language.Locale site.Language.Lang) -}}
+  {{- $walineLang := "en" -}}
+  {{- if or (eq $locale "zh-hans") (eq $locale "zh-cn") (eq $locale "zh") -}}
+    {{- $walineLang = "zh-CN" -}}
+  {{- else if or (eq $locale "zh-hant") (eq $locale "zh-tw") (eq $locale "zh-hk") (eq $locale "zh-mo") -}}
+    {{- $walineLang = "zh-TW" -}}
+  {{- end -}}
+  <section class="comments card" aria-labelledby="comments-title">
+    <h2 class="comments-title" id="comments-title">{{ i18n "comments" }}</h2>
+    <div class="comments-provider comments-provider-waline" id="waline-comments"></div>
+  </section>
+
+  {{- $options := dict
+    "el" "#waline-comments"
+    "serverURL" $serverURL
+    "path" .RelPermalink
+    "dark" `html[data-theme="dark"]`
+    "lang" $walineLang
+  -}}
+  {{- with $waline.commentSorting -}}{{- $options = merge $options (dict "commentSorting" .) -}}{{- end -}}
+  {{- with $waline.emoji -}}{{- $options = merge $options (dict "emoji" .) -}}{{- end -}}
+  {{- with $waline.login -}}{{- $options = merge $options (dict "login" .) -}}{{- end -}}
+  {{- with $waline.meta -}}{{- $options = merge $options (dict "meta" .) -}}{{- end -}}
+  {{- with $waline.pageSize -}}{{- $options = merge $options (dict "pageSize" .) -}}{{- end -}}
+  {{- with $waline.reaction -}}{{- $options = merge $options (dict "reaction" .) -}}{{- end -}}
+  {{- with $waline.requiredMeta -}}{{- $options = merge $options (dict "requiredMeta" .) -}}{{- end -}}
+  {{- with $waline.wordLimit -}}{{- $options = merge $options (dict "wordLimit" .) -}}{{- end -}}
+
+  <script type="module">
+    import { init } from "{{ $jsURL | safeJS }}";
+
+    init({{ $options | jsonify | safeJS }});
+  </script>
+{{- end -}}

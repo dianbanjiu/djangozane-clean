@@ -122,6 +122,11 @@ paginate = 10
     enabled = true
   [params.photoswipe]
     enabled = true
+  [params.comments]
+    enabled = false
+    provider = "waline"
+    [params.comments.waline]
+      serverURL = ""
 
 [markup]
   [markup.highlight]
@@ -145,6 +150,9 @@ paginate = 10
 | `featuredProjects` | 首页推荐项目列表，最多显示 4 个 | 无 |
 | `search.enabled` | 是否启用 Pagefind 全文搜索 | `false` |
 | `photoswipe.enabled` | 是否启用图片灯箱 | `false` |
+| `comments.enabled` | 是否启用文章评论 | `false` |
+| `comments.provider` | 评论系统提供方，目前内置 `waline` | `waline` |
+| `comments.waline.serverURL` | Waline 服务端地址 | 无 |
 
 ### 语言配置
 
@@ -227,6 +235,23 @@ npx pagefind --site public
 ```
 
 > 启用后文章内所有未被链接包裹的图片会自动获得灯箱效果，无需额外操作。
+
+### 评论系统
+
+主题内置可扩展评论入口，通过 `params.comments.provider` 选择具体实现。目前内置 Waline，部署好 Waline 服务端后配置 `serverURL` 即可启用：
+
+```toml
+[params]
+  [params.comments]
+    enabled = true
+    provider = "waline"
+    [params.comments.waline]
+      serverURL = "https://your-waline-server.example.com"
+```
+
+评论默认只在 `post` 分区的文章页显示。Waline 的亮暗主题会自动跟随主题的 `data-theme` 切换，界面语言会根据站点 `locale` 自动设置；单篇文章可在 front matter 中设置 `comment: false` 关闭评论。
+
+如需接入其他评论系统，新增 `layouts/_partials/comments/<provider>.html`，并在 `layouts/_partials/comments.html` 中加入 provider 分发逻辑即可。
 
 ### 菜单配置
 
