@@ -2,117 +2,42 @@
   {{ partial "hero.html" . }}
 
   {{ if .Pages }}
-    <div class="tag-cloud-canvas-wrapper card">
-      <canvas id="tag-cloud-canvas"></canvas>
-    </div>
-    <script src="{{ "vendor/wordcloud/wordcloud2.js" | relURL }}"></script>
-    <script>
-      (function () {
-        var tags = [
-          {{- range .Pages -}}
-            ["{{ .LinkTitle | safeJS }}", {{ .Pages.Len }}, "{{ .RelPermalink | safeJS }}"],
-          {{- end -}}
-        ];
-
-        var canvas = document.getElementById('tag-cloud-canvas');
-        var wrapper = canvas.parentElement;
-
-        function isDark() {
-          return document.documentElement.getAttribute('data-theme') === 'dark';
-        }
-
-        function getColors() {
-          var style = getComputedStyle(document.documentElement);
-          return {
-            accent: style.getPropertyValue('--accent').trim(),
-            accentEnd: style.getPropertyValue('--accent-end').trim(),
-            text: style.getPropertyValue('--text').trim(),
-            textSecondary: style.getPropertyValue('--text-secondary').trim()
-          };
-        }
-
-        function measureCanvasSize() {
-          var rect = wrapper.getBoundingClientRect();
-          var style = getComputedStyle(wrapper);
-          var padX =
-            (parseFloat(style.paddingLeft) || 0) + (parseFloat(style.paddingRight) || 0);
-          var padY =
-            (parseFloat(style.paddingTop) || 0) + (parseFloat(style.paddingBottom) || 0);
-          var w = Math.max(240, Math.floor(rect.width - padX));
-          var h = Math.max(280, Math.floor(rect.height - padY));
-          /* 首帧或布局未撑开时，用接近卡片比例的高度兜底 */
-          if (h < 320) {
-            h = Math.round(Math.min(Math.max(w * 0.68, 320), 680));
-          }
-          return { w: w, h: h };
-        }
-
-        function render() {
-          var dims = measureCanvasSize();
-          var w = dims.w;
-          var h = dims.h;
-          canvas.width = w * 2;
-          canvas.height = h * 2;
-          canvas.style.width = w + 'px';
-          canvas.style.height = h + 'px';
-
-          var colors = getColors();
-          var palette = [colors.accent, colors.accentEnd, colors.text, colors.textSecondary];
-
-          var maxCount = Math.max.apply(null, tags.map(function (t) { return t[1]; }));
-          var minSize = 15;
-          var maxSize = Math.max(34, Math.min(w / 7, 56));
-          var list = tags.map(function (t) {
-            var size = maxCount > 1
-              ? minSize + (t[1] - 1) / (maxCount - 1) * (maxSize - minSize)
-              : (minSize + maxSize) / 2;
-            return [t[0], size * 2];
-          });
-
-          WordCloud(canvas, {
-            list: list,
-            gridSize: Math.max(4, Math.round(Math.min(w, h) / 90)),
-            weightFactor: 1,
-            fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
-            fontWeight: 600,
-            color: function () {
-              return palette[Math.floor(Math.random() * palette.length)];
-            },
-            rotateRatio: 0.25,
-            rotationSteps: 2,
-            ellipticity: 0.38,
-            backgroundColor: 'transparent',
-            drawOutOfBound: false,
-            shrinkToFit: true,
-            click: function (item) {
-              var tag = tags.find(function (t) { return t[0] === item[0]; });
-              if (tag) window.location.href = tag[2];
-            },
-            hover: function (item) {
-              canvas.style.cursor = item ? 'pointer' : 'default';
-            }
-          });
-        }
-
-        render();
-        requestAnimationFrame(function () {
-          render();
-        });
-
-        var resizeTimer;
-        window.addEventListener('resize', function () {
-          clearTimeout(resizeTimer);
-          resizeTimer = setTimeout(render, 200);
-        });
-
-        var observer = new MutationObserver(function (mutations) {
-          mutations.forEach(function (m) {
-            if (m.attributeName === 'data-theme') render();
-          });
-        });
-        observer.observe(document.documentElement, { attributes: true });
-      })();
-    </script>
+    {{ $minCount := 999999 }}
+    {{ $maxCount := 0 }}
+    {{ $items := slice }}
+    {{ range .Pages }}
+      {{ $count := len .Pages }}
+      {{ if lt $count $minCount }}
+        {{ $minCount = $count }}
+      {{ end }}
+      {{ if gt $count $maxCount }}
+        {{ $maxCount = $count }}
+      {{ end }}
+      {{ $sortKey := printf "%06d-%s" (sub 999999 $count) (lower .LinkTitle) }}
+      {{ $items = $items | append (dict "page" . "count" $count "sortKey" $sortKey) }}
+    {{ end }}
+    {{ $minScaled := math.Log (add $minCount 1) }}
+    {{ $maxScaled := math.Log (add $maxCount 1) }}
+    <nav class="tag-cloud card" aria-label="{{ .Title }}">
+      {{ range sort $items "sortKey" "asc" }}
+        {{ $level := 3 }}
+        {{ if gt $maxCount $minCount }}
+          {{ $scaled := math.Log (add .count 1) }}
+          {{ $span := sub $maxScaled $minScaled }}
+          {{ if gt $span 0 }}
+            {{ $level = int (add (math.Floor (mul (div (sub $scaled $minScaled) $span) 5)) 1) }}
+            {{ if lt $level 1 }}
+              {{ $level = 1 }}
+            {{ else if gt $level 6 }}
+              {{ $level = 6 }}
+            {{ end }}
+          {{ end }}
+        {{ end }}
+        <a class="tag tag-cloud-item tag-cloud-item--level-{{ $level }}" href="{{ .page.RelPermalink }}" title="{{ .page.LinkTitle }}：{{ .count }} 篇文章" aria-label="{{ .page.LinkTitle }}，{{ .count }} 篇文章">
+          {{ .page.LinkTitle }}
+        </a>
+      {{ end }}
+    </nav>
   {{ else }}
     <p class="empty-state">{{ i18n "no_tags" }}</p>
   {{ end }}

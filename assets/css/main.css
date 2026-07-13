@@ -30,7 +30,7 @@
     --primary: var(--ink);
     --on-primary: var(--canvas);
 
-    /* Legacy tokens kept for partial compatibility (post-card hover, tag-cloud JS) */
+    /* Legacy tokens kept for partial compatibility */
     --bg: var(--canvas);
     --bg-secondary: var(--surface-soft);
     --card-bg: var(--canvas);
@@ -1283,21 +1283,76 @@ main {
     border-top: 1px solid var(--hairline);
 }
 
-/* ===== Tag Cloud (wordcloud2) ===== */
-.tag-cloud-canvas-wrapper {
+/* ===== Tag Cloud ===== */
+.tag-cloud {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    justify-content: center;
-    padding: 1.5rem;
+    align-content: flex-start;
+    justify-content: flex-start;
+    gap: 0.7rem 0.75rem;
     width: 100%;
     box-sizing: border-box;
-    min-height: clamp(380px, min(58vh, 52vw), 680px);
 }
 
-.tag-cloud-canvas-wrapper canvas {
-    display: block;
+.tag-cloud-item {
+    flex: 0 1 auto;
     max-width: 100%;
-    height: auto;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    white-space: normal;
+    line-height: 1.2;
+    transition:
+        transform 0.15s ease,
+        background-color 0.15s ease,
+        color 0.15s ease,
+        border-color 0.15s ease,
+        opacity 0.15s ease;
+}
+
+.tag-cloud-item:hover {
+    opacity: 1;
+    transform: translateY(-1px);
+}
+
+.tag-cloud-item--level-1 {
+    padding: 0.42rem 0.68rem;
+    font-size: 0.78rem;
+    font-weight: 400;
+    opacity: 0.72;
+}
+
+.tag-cloud-item--level-2 {
+    padding: 0.44rem 0.72rem;
+    font-size: 0.86rem;
+    font-weight: 400;
+    opacity: 0.8;
+}
+
+.tag-cloud-item--level-3 {
+    padding: 0.46rem 0.78rem;
+    font-size: 0.96rem;
+    font-weight: 500;
+    opacity: 0.88;
+}
+
+.tag-cloud-item--level-4 {
+    padding: 0.48rem 0.82rem;
+    font-size: 1.08rem;
+    font-weight: 500;
+    opacity: 0.94;
+}
+
+.tag-cloud-item--level-5 {
+    padding: 0.5rem 0.88rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.tag-cloud-item--level-6 {
+    padding: 0.52rem 0.94rem;
+    font-size: 1.34rem;
+    font-weight: 600;
 }
 
 /* ===== Search (Pagefind) ===== */
@@ -1859,7 +1914,7 @@ body.has-bg-image main article.card:not(.post-card) {
 }
 
 /* Tag-cloud wrapper card: dissolve too */
-body.has-bg-image main .tag-cloud-canvas-wrapper.card {
+body.has-bg-image main .tag-cloud.card {
     background: transparent;
     border: none;
 }
@@ -1981,6 +2036,41 @@ body.has-bg-image .footer-card {
 
     .featured-project-grid {
         grid-template-columns: 1fr;
+    }
+
+    .tag-cloud {
+        gap: 0.5rem;
+        padding: 1rem;
+    }
+
+    .tag-cloud-item--level-1 {
+        padding: 0.34rem 0.58rem;
+        font-size: 0.76rem;
+    }
+
+    .tag-cloud-item--level-2 {
+        padding: 0.35rem 0.6rem;
+        font-size: 0.81rem;
+    }
+
+    .tag-cloud-item--level-3 {
+        padding: 0.36rem 0.64rem;
+        font-size: 0.87rem;
+    }
+
+    .tag-cloud-item--level-4 {
+        padding: 0.38rem 0.68rem;
+        font-size: 0.94rem;
+    }
+
+    .tag-cloud-item--level-5 {
+        padding: 0.4rem 0.72rem;
+        font-size: 1.02rem;
+    }
+
+    .tag-cloud-item--level-6 {
+        padding: 0.42rem 0.76rem;
+        font-size: 1.12rem;
     }
 }
 

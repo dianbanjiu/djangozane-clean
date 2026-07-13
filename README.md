@@ -11,7 +11,7 @@ DjangoZane Clean 是一个轻量、响应式的 Hugo 博客主题。主题以干
 - **响应式布局**：桌面端文章网格展示，移动端自动折叠菜单；文章页在小屏滚动后可在顶部显示当前文章标题。
 - **首页推荐项目**：通过 `params.featuredProjects` 配置项目卡片，最多展示 4 个，支持站内链接和外部链接。
 - **Pagefind 搜索浮层**：启用后导航栏自动出现搜索入口，支持 `/` 打开搜索、`Esc` 关闭、上下键选择结果。
-- **标签词云**：标签总览页使用 `wordcloud2.js` 渲染词云，字号按文章数量映射，点击标签进入归档页。
+- **标签词云**：标签总览页使用 Hugo 模板与 CSS Flexbox 渲染原生链接词云，字号和字重按文章数量映射。
 - **图片增强**：Markdown 图片自动懒加载；本地可处理图片会生成多尺寸 `srcset` 和 WebP，块级图片带 `figure/figcaption`。
 - **PhotoSwipe 灯箱**：文章图片可点击放大浏览，支持手势缩放和滑动切换。
 - **代码块增强**：代码块显示语言标签并提供复制按钮，语法高亮使用 Hugo Chroma。
@@ -340,8 +340,7 @@ comment = true
 ├── static/
 │   ├── favicon.ico
 │   └── vendor/
-│       ├── photoswipe/
-│       └── wordcloud/
+│       └── photoswipe/
 └── hugo.toml
 ```
 
