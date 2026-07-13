@@ -31,14 +31,14 @@
     "path" .RelPermalink
     "dark" `html[data-theme="dark"]`
     "lang" $walineLang
+    "meta" (slice "nick" "mail" "link")
+    "requiredMeta" (slice "nick" "mail")
+    "noRss" true
   -}}
   {{- with $waline.commentSorting -}}{{- $options = merge $options (dict "commentSorting" .) -}}{{- end -}}
   {{- with $waline.emoji -}}{{- $options = merge $options (dict "emoji" .) -}}{{- end -}}
-  {{- with $waline.login -}}{{- $options = merge $options (dict "login" .) -}}{{- end -}}
-  {{- with $waline.meta -}}{{- $options = merge $options (dict "meta" .) -}}{{- end -}}
   {{- with $waline.pageSize -}}{{- $options = merge $options (dict "pageSize" .) -}}{{- end -}}
   {{- with $waline.reaction -}}{{- $options = merge $options (dict "reaction" .) -}}{{- end -}}
-  {{- with $waline.requiredMeta -}}{{- $options = merge $options (dict "requiredMeta" .) -}}{{- end -}}
   {{- with $waline.wordLimit -}}{{- $options = merge $options (dict "wordLimit" .) -}}{{- end -}}
 
   <script type="module">
