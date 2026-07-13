@@ -1,94 +1,86 @@
 # DjangoZane Clean
 
-一个基于 **Catppuccin** 配色的 Hugo 新拟态（Neumorphism）主题，简洁、现代、响应式。
+DjangoZane Clean 是一个轻量、响应式的 Hugo 博客主题。主题以干净的文章阅读体验为核心，内置明暗主题、首页推荐项目、标签词云、Pagefind 搜索、图片灯箱、代码块复制、响应式图片和 Waline 评论等常用博客能力。
 
 **在线演示**：[blog-demo.djangozane.com](https://blog-demo.djangozane.com)
 
-## 特点
+## 功能特点
 
-- **Catppuccin 配色** — 亮色模式使用 Latte，暗色模式使用 Mocha，视觉柔和舒适
-- **新拟态设计** — 卡片、按钮、标签均采用凸出/凹陷阴影，呈现立体质感
-- **明暗主题切换** — 支持手动切换与跟随系统偏好
-- **全局背景图** — 通过配置项设置全屏背景图，自动为 header、卡片、footer 添加毛玻璃半透明效果
-- **代码块增强** — 自动显示语言标签 + 一键复制按钮
-- **i18n 多语言** — 内置简体中文、繁体中文、英文翻译，通过 `languageCode` 配置切换界面语言
-- **响应式布局** — 桌面端双列文章网格，移动端自动切换为单列，小屏幕下导航折叠为汉堡菜单
-- **零依赖** — 无 Tailwind / Bootstrap / npm，纯 CSS + 原生 JS，轻量快速
-- **Pagefind 全文搜索** — 基于 Pagefind 的静态搜索，通过配置项一键开关
-- **标签词云** — 标签页使用 wordcloud2.js 渲染词云，字号按文章数量映射，点击跳转，主题切换时自动重绘
-- **图片灯箱** — 基于 PhotoSwipe 5，文章内图片点击放大、手势缩放/滑动，通过配置项一键开关
-- **完整页面模板** — 首页、文章列表、文章详情、标签词云、标签归档、搜索、404 页面
+- **轻量博客主题**：无 Tailwind、Bootstrap 或 npm 构建依赖，主题主体由 Hugo 模板、CSS 和原生 JS 组成。
+- **明暗主题切换**：首次访问跟随系统偏好，手动切换后写入 `localStorage`，并同步 `theme-color`。
+- **响应式布局**：桌面端文章网格展示，移动端自动折叠菜单；文章页在小屏滚动后可在顶部显示当前文章标题。
+- **首页推荐项目**：通过 `params.featuredProjects` 配置项目卡片，最多展示 4 个，支持站内链接和外部链接。
+- **Pagefind 搜索浮层**：启用后导航栏自动出现搜索入口，支持 `/` 打开搜索、`Esc` 关闭、上下键选择结果。
+- **标签词云**：标签总览页使用 `wordcloud2.js` 渲染词云，字号按文章数量映射，点击标签进入归档页。
+- **图片增强**：Markdown 图片自动懒加载；本地可处理图片会生成多尺寸 `srcset` 和 WebP，块级图片带 `figure/figcaption`。
+- **PhotoSwipe 灯箱**：文章图片可点击放大浏览，支持手势缩放和滑动切换。
+- **代码块增强**：代码块显示语言标签并提供复制按钮，语法高亮使用 Hugo Chroma。
+- **Waline 评论**：内置 Waline 评论模板，支持明暗主题、界面语言自动匹配和常用 Waline 参数透传。
+- **多语言界面**：内置简体中文、繁体中文和英文翻译。
+- **完整页面模板**：包含首页、文章列表、文章详情、标签总览、标签归档、普通页面、分页和 404 页面。
 
-## 要求
+## 环境要求
 
-- Hugo **v0.146.0** 或更高版本（无需 Extended 版本）
+- Hugo `v0.146.0` 或更高版本
+- 不要求 Hugo Extended
 
 ## 快速开始
 
-### 方式一：Git Submodule（推荐）
+### 作为 Git Submodule 使用
 
 ```bash
-# 创建新站点
 hugo new site my-site
 cd my-site
 git init
 
-# 以子模块方式添加主题
-git submodule add https://github.com/your-username/djangozane-clean.git themes/djangozane-clean
-
-# 在 hugo.toml 中指定主题
+git submodule add https://github.com/dianbanjiu/djangozane-clean.git themes/djangozane-clean
 echo "theme = 'djangozane-clean'" >> hugo.toml
 
-# 创建第一篇文章
 hugo new content posts/hello-world.md
-
-# 启动开发服务器
 hugo server -D
 ```
 
-克隆已有项目时需初始化子模块：
+克隆已有站点时初始化主题子模块：
 
 ```bash
-git clone --recurse-submodules https://github.com/your-username/my-site.git
-# 或在已克隆的仓库中
+git clone --recurse-submodules https://github.com/your-name/my-site.git
+```
+
+在已克隆仓库中补齐子模块：
+
+```bash
 git submodule update --init --recursive
 ```
 
-更新主题到最新版本：
+更新主题：
 
 ```bash
 git submodule update --remote themes/djangozane-clean
 ```
 
-### 方式二：直接克隆
+### 直接克隆主题
 
 ```bash
-# 创建新站点
 hugo new site my-site
 cd my-site
 
-# 克隆主题
-git clone https://github.com/your-username/djangozane-clean.git themes/djangozane-clean
-
-# 在 hugo.toml 中指定主题
+git clone https://github.com/dianbanjiu/djangozane-clean.git themes/djangozane-clean
 echo "theme = 'djangozane-clean'" >> hugo.toml
 
-# 创建第一篇文章
 hugo new content posts/hello-world.md
-
-# 启动开发服务器
 hugo server -D
 ```
 
-## 配置
+## 配置示例
 
-`hugo.toml` 示例：
+站点的 `hugo.toml` 可参考下面的最小配置：
 
 ```toml
 baseURL = 'https://example.org/'
 locale = 'zh-Hans'
 title = '我的博客'
 paginate = 10
+theme = 'djangozane-clean'
 
 [menus]
   [[menus.main]]
@@ -113,20 +105,25 @@ paginate = 10
   # logo = '/images/logo.png'
   # favicon = '/favicon.svg'
   # backgroundImage = '/bg.jpg'
-  # [params.featuredProjects]]
-  #   title = '项目名称'
-  #   description = '项目简介'
-  #   image = '/images/project.jpg'
-  #   url = '/posts/project-intro/'
+
   [params.search]
     enabled = true
+
   [params.photoswipe]
     enabled = true
+
   [params.comments]
     enabled = false
-    provider = "waline"
+    provider = 'waline'
+
     [params.comments.waline]
-      serverURL = ""
+      serverURL = ''
+
+  [[params.featuredProjects]]
+    title = 'DjangoZane Clean'
+    description = '简洁美观的 Hugo 博客主题'
+    image = '/images/project-cover.jpg'
+    url = 'https://github.com/dianbanjiu/djangozane-clean'
 
 [markup]
   [markup.highlight]
@@ -140,46 +137,51 @@ paginate = 10
     min = '0.146.0'
 ```
 
-### 参数说明
+## 参数说明
 
 | 参数 | 说明 | 默认值 |
-|------|------|--------|
-| `logo` | 站点 Logo 图片路径（放在 `static/` 下） | 无，显示站点标题文字 |
-| `favicon` | 站点图标路径 | 无 |
-| `backgroundImage` | 全局背景图路径（放在 `static/` 下） | 无，使用纯色背景 |
-| `featuredProjects` | 首页推荐项目列表，最多显示 4 个 | 无 |
-| `search.enabled` | 是否启用 Pagefind 全文搜索 | `false` |
-| `photoswipe.enabled` | 是否启用图片灯箱 | `false` |
-| `comments.enabled` | 是否启用文章评论 | `false` |
-| `comments.provider` | 评论系统提供方，目前内置 `waline` | `waline` |
-| `comments.waline.serverURL` | Waline 服务端地址 | 无 |
+| --- | --- | --- |
+| `params.logo` | 站点 Logo 图片路径，通常放在站点 `static/` 目录下 | 显示站点标题文字 |
+| `params.favicon` | 站点图标路径 | 无 |
+| `params.backgroundImage` | 全局背景图路径；启用后页面主体区域使用毛玻璃效果提升可读性 | 无 |
+| `params.featuredProjects` | 首页推荐项目列表，最多展示前 4 个 | 无 |
+| `params.search.enabled` | 是否启用 Pagefind 搜索浮层和导航搜索按钮 | `false` |
+| `params.photoswipe.enabled` | 是否启用文章图片灯箱 | `false` |
+| `params.comments.enabled` | 是否启用文章评论 | `false` |
+| `params.comments.provider` | 评论系统提供方，目前内置 `waline` | `waline` |
+| `params.comments.waline.serverURL` | Waline 服务端地址，留空时不渲染评论区 | 无 |
+| `params.comments.waline.cssURL` | 自定义 Waline CSS 地址 | `https://unpkg.com/@waline/client@v3/dist/waline.css` |
+| `params.comments.waline.jsURL` | 自定义 Waline JS 地址 | `https://unpkg.com/@waline/client@v3/dist/waline.js` |
+| `params.comments.waline.commentSorting` | 透传给 Waline 的评论排序参数 | Waline 默认值 |
+| `params.comments.waline.emoji` | 透传给 Waline 的表情配置 | Waline 默认值 |
+| `params.comments.waline.pageSize` | 透传给 Waline 的分页大小 | Waline 默认值 |
+| `params.comments.waline.reaction` | 透传给 Waline 的互动反应配置 | Waline 默认值 |
+| `params.comments.waline.wordLimit` | 透传给 Waline 的字数限制 | Waline 默认值 |
 
-### 语言配置
+## 常用功能
 
-通过 `locale` 切换界面语言，内置三种翻译：
+### 多语言
+
+通过 `locale` 切换界面语言：
 
 | `locale` | 语言 |
-|---|---|
+| --- | --- |
 | `zh-Hans` | 简体中文 |
 | `zh-Hant` | 繁体中文 |
 | `en` | English |
 
-翻译文件位于 `i18n/` 目录，可自行修改或新增语言。切换语言时菜单 `name` 也需一并修改。
+翻译文件位于 `i18n/`。切换语言时，菜单名称需要在站点配置中同步修改。
 
 ### 全局背景图
-
-在 `[params]` 中设置 `backgroundImage` 即可启用全屏背景图：
 
 ```toml
 [params]
   backgroundImage = '/bg.jpg'
 ```
 
-将图片放到站点的 `static/` 目录下。启用后 header、卡片、footer 等区域会自动添加毛玻璃半透明效果，保证内容可读性。不设置则使用默认纯色背景。
+图片一般放在站点 `static/` 目录下。启用背景图后，正文容器、页头、页脚、卡片等区域会使用半透明与毛玻璃样式；未配置时使用默认纯色背景。
 
 ### 首页推荐项目
-
-在 `[params]` 下添加 `[[params.featuredProjects]]` 条目即可在首页“最新文章”上方显示推荐项目，最多显示前 4 个。每个项目支持 `title`、`description`、`image` 和 `url`。
 
 ```toml
 [[params.featuredProjects]]
@@ -190,167 +192,198 @@ paginate = 10
 
 [[params.featuredProjects]]
   title = '外部项目'
-  description = '可以跳转到完整的 http 或 https 链接'
+  description = '也可以跳转到外部链接'
   image = 'https://example.com/project-cover.jpg'
   url = 'https://example.com/project'
 ```
 
-`url` 支持完整的 `http`/`https` 链接，也支持站内文章路径；`image` 支持完整图片链接，也支持放在站点 `static/` 下的图片资源路径。
+每个项目支持 `title`、`description`、`image`、`url`。为了兼容旧字段，模板也会识别 `name`、`thumbnail`、`link`。
 
-### 搜索配置
+### 搜索
 
-主题集成了 [Pagefind](https://pagefind.app/) 静态全文搜索。通过 `params.search.enabled` 控制开关：
-
-```toml
-[params]
-  [params.search]
-    enabled = true   # 设为 false 可关闭搜索功能
-```
-
-启用后需在构建站点后运行 Pagefind 索引：
+主题集成 Pagefind，但索引需要在站点构建后生成：
 
 ```bash
 hugo
 npx pagefind --site public
 ```
 
-也可以在开发时使用：
-
-```bash
-hugo server -D
-# 另一个终端
-npx pagefind --site public
-```
-
-> 启用后导航栏会自动出现搜索图标按钮，无需手动添加菜单项。
-
-### 图片灯箱
-
-主题集成了 [PhotoSwipe 5](https://photoswipe.com/)，文章页图片点击可放大浏览，支持手势缩放和滑动切换。通过 `params.photoswipe.enabled` 控制开关：
+启用搜索：
 
 ```toml
-[params]
-  [params.photoswipe]
-    enabled = true   # 设为 false 可关闭图片灯箱
+[params.search]
+  enabled = true
 ```
 
-> 启用后文章内所有未被链接包裹的图片会自动获得灯箱效果，无需额外操作。
+启用后导航栏会自动出现搜索按钮。前端会按需加载 `/pagefind/pagefind.js`，搜索浮层支持 `/`、`Esc`、方向键和回车。
 
-### 评论系统
+### 图片灯箱与响应式图片
 
-主题内置可扩展评论入口，通过 `params.comments.provider` 选择具体实现。目前内置 Waline，部署好 Waline 服务端后配置 `serverURL` 即可启用：
+启用 PhotoSwipe：
 
 ```toml
-[params]
-  [params.comments]
-    enabled = true
-    provider = "waline"
-    [params.comments.waline]
-      serverURL = "https://your-waline-server.example.com"
+[params.photoswipe]
+  enabled = true
 ```
 
-评论默认只在 `post` 分区的文章页显示。Waline 的亮暗主题会自动跟随主题的 `data-theme` 切换，界面语言会根据站点 `locale` 自动设置；单篇文章可在 front matter 中设置 `comment: false` 关闭评论。
+Markdown 中的本地图片会优先通过 Hugo Image Processing 生成多尺寸图片和 WebP：
 
-如需接入其他评论系统，新增 `layouts/_partials/comments/<provider>.html`，并在 `layouts/_partials/comments.html` 中加入 provider 分发逻辑即可。
+```markdown
+![Bryce Canyon](bryce-canyon.jpg "Bryce Canyon")
+```
 
-### 菜单配置
+块级图片会渲染为 `figure`，标题会渲染为 `figcaption`。GIF、远程图片或不可处理资源会保留普通图片输出，但仍会设置懒加载属性。
 
-在 `[menus]` 下添加 `[[menus.main]]` 条目即可，`weight` 控制排列顺序：
+### Waline 评论
+
+```toml
+[params.comments]
+  enabled = true
+  provider = 'waline'
+
+  [params.comments.waline]
+    serverURL = 'https://your-waline-server.example.com'
+```
+
+评论区默认只在 `post` 分区的文章页显示。单篇文章可在 Front Matter 中设置 `comment: false` 关闭评论。
+
+Waline 的 `dark` 选项绑定到 `html[data-theme="dark"]`，语言会根据站点 `locale` 自动映射为 `zh-CN`、`zh-TW` 或 `en`。
+
+## 文章写作
+
+默认文章模板位于 `archetypes/default.md`。常用 Front Matter：
+
+```toml
++++
+title = '文章标题'
+date = 2026-01-01T08:00:00+08:00
+lastmod = 2026-01-02T08:00:00+08:00
+draft = false
+tags = ['Hugo', '主题']
+summary = '自定义摘要'
+comment = true
++++
+```
+
+| 字段 | 说明 |
+| --- | --- |
+| `title` | 文章标题 |
+| `date` | 发布日期，用于排序和展示 |
+| `lastmod` | 最后修改日期；与发布日期不是同一天时会显示“最后更新” |
+| `draft` | 草稿开关，`hugo server -D` 可预览 |
+| `tags` | 标签列表，用于文章卡片、文章页和标签归档 |
+| `summary` | 自定义摘要；未设置时 Hugo 自动生成 |
+| `comment` | 设为 `false` 可关闭当前文章评论 |
+
+## 菜单配置
+
+在 `[menus]` 下添加 `[[menus.main]]` 即可扩展导航：
 
 ```toml
 [[menus.main]]
-  name = 'About'
+  identifier = 'about'
+  name = '关于'
   pageRef = '/about'
   weight = 40
 ```
 
-### 文章 Front Matter
-
-```yaml
----
-title: "文章标题"
-date: 2025-01-01T08:00:00+08:00
-lastmod: 2025-03-15T10:00:00+08:00
-tags: ["Hugo", "教程"]
----
-```
-
-支持的字段：
-
-| 字段 | 说明 |
-|------|------|
-| `title` | 文章标题 |
-| `date` | 发布日期，用于排序和显示，格式为 `YYYY-MM-DD` |
-| `lastmod` | 最后修改日期，与 `date` 年月日不同时自动显示 |
-| `draft` | 设为 `true` 时仅 `hugo server -D` 可见 |
-| `tags` | 标签列表，自动生成标签页 |
-| `summary` | 自定义摘要，未设置时自动截取正文 |
+如果启用了搜索，主题会自动在导航中添加搜索入口，不需要手动配置搜索菜单项。
 
 ## 目录结构
 
-```
+```text
 .
 ├── archetypes/
-│   └── default.md                          # 新内容模板
+│   └── default.md
 ├── assets/
-│   ├── css/main.css                        # 主样式（Catppuccin 变量 + 新拟态）
-│   └── js/main.js                          # 主题切换 + 移动端菜单
+│   ├── css/
+│   │   ├── main.css
+│   │   └── comments.css
+│   └── js/
+│       └── main.js
 ├── content/
-│   ├── _index.md                           # 首页内容
-│   └── posts/                              # 示例文章
+│   ├── _index.md
+│   └── posts/
 ├── i18n/
-│   ├── zh-Hans.yaml                        # 简中翻译
-│   ├── zh-Hant.yaml                        # 繁中翻译
-│   └── en.yaml                             # 英文翻译
+│   ├── en.yaml
+│   ├── zh-Hans.yaml
+│   └── zh-Hant.yaml
 ├── layouts/
-│   ├── baseof.html                         # HTML 骨架
-│   ├── home.html                           # 首页模板
-│   ├── page.html                           # 文章详情
-│   ├── section.html                        # 分区列表
-│   ├── taxonomy.html                       # 标签/分类总览
-│   ├── term.html                           # 单个标签下的文章列表
-│   ├── 404.html                            # 404 页面
+│   ├── 404.html
+│   ├── baseof.html
+│   ├── home.html
+│   ├── page.html
+│   ├── section.html
+│   ├── taxonomy.html
+│   ├── term.html
+│   ├── _markup/
+│   │   └── render-image.html
 │   ├── _default/_markup/
-│   │   └── render-codeblock.html           # 代码块渲染（语言标签 + 复制按钮）
+│   │   └── render-codeblock.html
 │   └── _partials/
-│       ├── head.html                       # <head> 内容
-│       ├── head/css.html                   # CSS 资源管道
-│       ├── head/js.html                    # JS 资源管道
-│       ├── header.html                     # 站点头部
-│       ├── footer.html                     # 站点底部
-│       ├── menu.html                       # 导航菜单
-│       ├── hero.html                       # 首页 Hero 区域
-│       ├── datetime.html                   # 日期 + 最后更新时间
-│       ├── post-card.html                  # 文章卡片
-│       ├── pagination.html                 # 分页导航
-│       └── photoswipe.html                 # PhotoSwipe 灯箱
-└── hugo.toml                               # 主题示例配置
+│       ├── comments/
+│       │   └── waline.html
+│       ├── head/
+│       │   ├── css.html
+│       │   └── js.html
+│       ├── comments.html
+│       ├── datetime.html
+│       ├── featured-projects.html
+│       ├── footer.html
+│       ├── head.html
+│       ├── header.html
+│       ├── hero.html
+│       ├── menu.html
+│       ├── pagination.html
+│       ├── photoswipe.html
+│       └── post-card.html
+├── static/
+│   ├── favicon.ico
+│   └── vendor/
+│       ├── photoswipe/
+│       └── wordcloud/
+└── hugo.toml
 ```
 
 ## 自定义
 
-### 修改配色
+### 修改样式
 
-编辑 `assets/css/main.css` 顶部的 CSS 变量：
+主题主要样式在 `assets/css/main.css`。配色、间距、圆角、阴影和字体变量集中定义在文件顶部，可按需修改。
 
-```css
-:root {
-  --bg: #eff1f5;
-  --accent: #7287fd;
-  --accent-end: #8839ef;
-  /* ... */
-}
+### 修改脚本行为
 
-[data-theme="dark"] {
-  --bg: #1e1e2e;
-  --accent: #7287fd;
-  /* ... */
-}
+主题交互逻辑在 `assets/js/main.js`，包括主题切换、代码复制、移动端菜单、移动端文章标题显示和搜索浮层。
+
+### 扩展评论系统
+
+目前内置 Waline。如需增加其他评论系统，可以新增：
+
+```text
+layouts/_partials/comments/<provider>.html
 ```
 
-### 修改字体
+然后在 `layouts/_partials/comments.html` 中增加对应的 provider 分发逻辑。
 
-在 `assets/css/main.css` 中找到 `body` 的 `font-family` 进行替换。代码字体在 `.article-content code` 中配置。
+## 开发
+
+在主题目录内可直接运行示例站点：
+
+```bash
+hugo server -D
+```
+
+生产构建：
+
+```bash
+hugo
+```
+
+如启用了 Pagefind 搜索，生产构建后再生成索引：
+
+```bash
+npx pagefind --site public
+```
 
 ## 许可证
 
