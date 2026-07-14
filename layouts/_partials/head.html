@@ -45,7 +45,7 @@
 <script>
 (function(){var k="djangozane-clean-theme",s=localStorage.getItem(k),t=s||((window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)?"dark":"light");document.documentElement.setAttribute("data-theme",t);var m=document.querySelector('meta[name="theme-color"]');if(m)m.content=t==="dark"?"#0a0a0a":"#ffffff"})();
 </script>
-{{ partialCached "head/css.html" . }}
+{{ partial "head/css.html" . }}
 {{ partialCached "head/js.html" . }}
 <script>
 window.__THEME_I18N__ = {
