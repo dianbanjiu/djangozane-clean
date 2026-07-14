@@ -1,6 +1,6 @@
 {{- $comments := site.Params.comments -}}
 {{- $enabled := and $comments $comments.enabled -}}
-{{- $isPost := and .IsPage (eq .Section "post") -}}
+{{- $isPost := and .IsPage (or (eq .Section "post") (eq .Section "posts")) -}}
 {{- $pageEnabled := ne .Params.comment false -}}
 {{- if and $enabled $isPost $pageEnabled -}}
   {{- $provider := default "waline" $comments.provider -}}

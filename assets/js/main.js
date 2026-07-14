@@ -145,6 +145,7 @@
     function openSearch() {
       overlay.classList.add("open");
       overlay.setAttribute("aria-hidden", "false");
+      overlay.setAttribute("aria-modal", "true");
       document.body.classList.add("search-open");
       input.value = "";
       activeIndex = -1;
@@ -167,6 +168,7 @@
     function closeSearch() {
       overlay.classList.remove("open");
       overlay.setAttribute("aria-hidden", "true");
+      overlay.setAttribute("aria-modal", "false");
       document.body.classList.remove("search-open");
       activeIndex = -1;
     }

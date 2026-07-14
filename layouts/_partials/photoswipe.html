@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="{{ "vendor/photoswipe/dist/photoswipe.css" | relURL }}">
-<script src="{{ "vendor/photoswipe/dist/umd/photoswipe.umd.min.js" | relURL }}"></script>
-<script src="{{ "vendor/photoswipe/dist/umd/photoswipe-lightbox.umd.min.js" | relURL }}"></script>
+<script src="{{ "vendor/photoswipe/dist/umd/photoswipe.umd.min.js" | relURL }}" defer></script>
+<script src="{{ "vendor/photoswipe/dist/umd/photoswipe-lightbox.umd.min.js" | relURL }}" defer></script>
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     var container = document.querySelector('.article-content');
@@ -9,8 +9,11 @@
     // 对未被 render-image 模板包裹的 img 做动态包裹
     container.querySelectorAll('img').forEach(function (img) {
       if (img.closest('a')) return;
+      // 校验图片 URL 协议，拒绝 javascript: / data: / vbscript: 等危险 URI
+      var src = (img.src || '').trim();
+      if (/^(javascript|data|vbscript):/i.test(src)) return;
       var wrapper = document.createElement('a');
-      wrapper.href = img.src;
+      wrapper.href = src;
       wrapper.setAttribute('data-pswp-width', img.naturalWidth || 1600);
       wrapper.setAttribute('data-pswp-height', img.naturalHeight || 1200);
       wrapper.setAttribute('target', '_blank');

@@ -1,8 +1,30 @@
 {{- $waline := site.Params.comments.waline -}}
 {{- $serverURL := strings.TrimSuffix "/" (default "" $waline.serverURL) -}}
 {{- if $serverURL -}}
-  {{- $cssURL := default "https://unpkg.com/@waline/client@v3/dist/waline.css" $waline.cssURL -}}
-  {{- $jsURL := default "https://unpkg.com/@waline/client@v3/dist/waline.js" $waline.jsURL -}}
+  {{- /* 白名单校验：仅允许来自 unpkg 或本地 vendor 的 Waline 资源 */}}
+  {{- $allowedHosts := slice "unpkg.com" "cdn.jsdelivr.net" -}}
+  {{- $defaultCSS := "https://unpkg.com/@waline/client@v3/dist/waline.css" -}}
+  {{- $defaultJS := "https://unpkg.com/@waline/client@v3/dist/waline.js" -}}
+  {{- $cssURL := default $defaultCSS $waline.cssURL -}}
+  {{- $jsURL := default $defaultJS $waline.jsURL -}}
+  {{- $cssParsed := urls.Parse $cssURL -}}
+  {{- $jsParsed := urls.Parse $jsURL -}}
+  {{- $cssHostOk := false -}}
+  {{- $jsHostOk := false -}}
+  {{- range $allowedHosts -}}
+    {{- if eq $cssParsed.Host . }}{{- $cssHostOk = true -}}{{- end -}}
+    {{- if eq $jsParsed.Host . }}{{- $jsHostOk = true -}}{{- end -}}
+  {{- end -}}
+  {{- if not $cssHostOk -}}
+    {{- warnf "Waline CSS URL host %q is not in the allowed list (%v). Falling back to default." $cssParsed.Host $allowedHosts -}}
+    {{- $cssURL = $defaultCSS -}}
+  {{- end -}}
+  {{- if not $jsHostOk -}}
+    {{- warnf "Waline JS URL host %q is not in the allowed list (%v). Falling back to default." $jsParsed.Host $allowedHosts -}}
+    {{- $jsURL = $defaultJS -}}
+  {{- end -}}
+  <link rel="preconnect" href="https://unpkg.com">
+  <link rel="dns-prefetch" href="https://unpkg.com">
   <link rel="stylesheet" href="{{ $cssURL | safeURL }}">
   {{- with resources.Get "css/comments.css" -}}
     {{- if hugo.IsDevelopment -}}
@@ -35,11 +57,43 @@
     "requiredMeta" (slice "nick" "mail")
     "noRss" true
   -}}
-  {{- with $waline.commentSorting -}}{{- $options = merge $options (dict "commentSorting" .) -}}{{- end -}}
-  {{- with $waline.emoji -}}{{- $options = merge $options (dict "emoji" .) -}}{{- end -}}
-  {{- with $waline.pageSize -}}{{- $options = merge $options (dict "pageSize" .) -}}{{- end -}}
-  {{- with $waline.reaction -}}{{- $options = merge $options (dict "reaction" .) -}}{{- end -}}
-  {{- with $waline.wordLimit -}}{{- $options = merge $options (dict "wordLimit" .) -}}{{- end -}}
+  {{- /* 对用户可配置的选项做类型校验，防止通过 site config 注入非预期值 */}}
+  {{- with $waline.commentSorting -}}
+    {{- $valid := slice "latest" "oldest" "hottest" -}}
+    {{- if collections.In $valid . -}}
+      {{- $options = merge $options (dict "commentSorting" .) -}}
+    {{- else -}}
+      {{- warnf "Waline commentSorting must be one of %v, got %q. Ignored." $valid . -}}
+    {{- end -}}
+  {{- end -}}
+  {{- with $waline.emoji -}}
+    {{- if reflect.IsSlice . -}}
+      {{- $options = merge $options (dict "emoji" .) -}}
+    {{- else -}}
+      {{- warnf "Waline emoji must be an array. Ignored." -}}
+    {{- end -}}
+  {{- end -}}
+  {{- with $waline.pageSize -}}
+    {{- if or (eq (printf "%T" .) "int") (eq (printf "%T" .) "float64") -}}
+      {{- $options = merge $options (dict "pageSize" (int .)) -}}
+    {{- else -}}
+      {{- warnf "Waline pageSize must be a number, got %v. Ignored." . -}}
+    {{- end -}}
+  {{- end -}}
+  {{- with $waline.reaction -}}
+    {{- if reflect.IsSlice . -}}
+      {{- $options = merge $options (dict "reaction" .) -}}
+    {{- else -}}
+      {{- warnf "Waline reaction must be an array. Ignored." -}}
+    {{- end -}}
+  {{- end -}}
+  {{- with $waline.wordLimit -}}
+    {{- if or (eq (printf "%T" .) "int") (eq (printf "%T" .) "float64") -}}
+      {{- $options = merge $options (dict "wordLimit" (int .)) -}}
+    {{- else -}}
+      {{- warnf "Waline wordLimit must be a number, got %v. Ignored." . -}}
+    {{- end -}}
+  {{- end -}}
 
   <script type="module">
     import { init } from "{{ $jsURL | safeJS }}";

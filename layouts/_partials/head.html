@@ -4,6 +4,43 @@
 {{- with site.Params.favicon }}
 <link rel="icon" href="{{ . | relURL }}">
 {{- end }}
+{{- /* ---- Description ---- */}}
+{{- $description := "" }}
+{{- if .IsHome }}
+  {{- $description = site.Params.description | default site.Title }}
+{{- else if .Description }}
+  {{- $description = .Description }}
+{{- else }}
+  {{- $description = .Summary | plainify }}
+{{- end }}
+<meta name="description" content="{{ $description }}">
+{{- /* ---- Canonical ---- */}}
+<link rel="canonical" href="{{ .Permalink }}">
+{{- /* ---- Open Graph ---- */}}
+<meta property="og:title" content="{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }}{{ end }}">
+<meta property="og:description" content="{{ $description }}">
+<meta property="og:url" content="{{ .Permalink }}">
+<meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
+{{- $ogImage := "" }}
+{{- with .Params.cover }}{{ $ogImage = . | absURL }}{{ end }}
+{{- if not $ogImage }}{{ with site.Params.cover }}{{ $ogImage = . | absURL }}{{ end }}{{ end }}
+{{- if not $ogImage }}{{ with site.Params.logo }}{{ $ogImage = . | absURL }}{{ end }}{{ end }}
+{{- with $ogImage }}
+<meta property="og:image" content="{{ . }}">
+{{- end }}
+<meta property="og:site_name" content="{{ site.Title }}">
+{{- if not .IsHome }}
+  {{- with site.Language.Locale }}
+<meta property="og:locale" content="{{ . }}">
+  {{- end }}
+{{- end }}
+{{- /* ---- Twitter Card ---- */}}
+<meta name="twitter:card" content="{{ if $ogImage }}summary_large_image{{ else }}summary{{ end }}">
+<meta name="twitter:title" content="{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }}{{ end }}">
+<meta name="twitter:description" content="{{ $description }}">
+{{- with $ogImage }}
+<meta name="twitter:image" content="{{ . }}">
+{{- end }}
 <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ printf "%s | %s" .Title site.Title }}{{ end }}</title>
 <script>
 (function(){var k="djangozane-clean-theme",s=localStorage.getItem(k),t=s||((window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches)?"dark":"light");document.documentElement.setAttribute("data-theme",t);var m=document.querySelector('meta[name="theme-color"]');if(m)m.content=t==="dark"?"#0a0a0a":"#ffffff"})();
