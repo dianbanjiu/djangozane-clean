@@ -1,6 +1,24 @@
-<link rel="stylesheet" href="{{ "vendor/photoswipe/dist/photoswipe.css" | relURL }}">
-<script src="{{ "vendor/photoswipe/dist/umd/photoswipe.umd.min.js" | relURL }}" defer></script>
-<script src="{{ "vendor/photoswipe/dist/umd/photoswipe-lightbox.umd.min.js" | relURL }}" defer></script>
+{{- if site.Params.photoswipe.enabled }}
+  {{- $pswpCSS := resources.Get "vendor/photoswipe/dist/photoswipe.css" -}}
+  {{- $pswpJS := resources.Get "vendor/photoswipe/dist/umd/photoswipe.umd.min.js" -}}
+  {{- $pswpLightboxJS := resources.Get "vendor/photoswipe/dist/umd/photoswipe-lightbox.umd.min.js" -}}
+  {{- if and $pswpCSS $pswpJS $pswpLightboxJS -}}
+    {{- if hugo.IsDevelopment -}}
+      <link rel="stylesheet" href="{{ $pswpCSS.RelPermalink }}">
+      <script src="{{ $pswpJS.RelPermalink }}" defer></script>
+      <script src="{{ $pswpLightboxJS.RelPermalink }}" defer></script>
+    {{- else -}}
+      {{- with $pswpCSS | minify | fingerprint -}}
+        <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous">
+      {{- end -}}
+      {{- with $pswpJS | minify | fingerprint -}}
+        <script src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous" defer></script>
+      {{- end -}}
+      {{- with $pswpLightboxJS | minify | fingerprint -}}
+        <script src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous" defer></script>
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     var container = document.querySelector('.article-content');
@@ -51,3 +69,4 @@
     lightbox.init();
   });
 </script>
+{{- end -}}

@@ -9,7 +9,7 @@
       <h2 class="section-title">{{ i18n "latest_posts" }}</h2>
       <div class="post-grid">
         {{ range $latest }}
-          {{ partial "post-card.html" . }}
+          {{ partial "post-card.html" (dict "Page" . "HeadingLevel" 3) }}
         {{ end }}
       </div>
     </section>

@@ -1,0 +1,107 @@
+/* ===== Syntax Highlight — Catppuccin via CSS custom properties ===== */
+:root {
+    --ch-text: #3c3f58;
+    --ch-err: #d20f39;
+    --ch-hl-bg: #eaeaea;
+    --ch-ln: #8c8fa1;
+    --ch-keyword: #8839ef;
+    --ch-kc: #fe640b;
+    --ch-kn: #179299;
+    --ch-na: #1e66f5;
+    --ch-nc: #df8e1d;
+    --ch-nl: #04a5e5;
+    --ch-nv: #dc8a78;
+    --ch-s: #40a02b;
+    --ch-sd: #9ca0b0;
+    --ch-ch: #acb0be;
+    --ch-m: #fe640b;
+    --ch-c: #9ca0b0;
+    --ch-gd-text: #d20f39;
+    --ch-gd-bg: #ccd0da;
+    --ch-gi-text: #40a02b;
+    --ch-gi-bg: #ccd0da;
+}
+
+[data-theme="dark"] {
+    --ch-text: #cdd6f4;
+    --ch-err: #f38ba8;
+    --ch-hl-bg: #1f1f1f;
+    --ch-ln: #7f849c;
+    --ch-keyword: #cba6f7;
+    --ch-kc: #fab387;
+    --ch-kn: #94e2d5;
+    --ch-na: #89b4fa;
+    --ch-nc: #f9e2af;
+    --ch-nl: #89dceb;
+    --ch-nv: #f5e0dc;
+    --ch-s: #a6e3a1;
+    --ch-sd: #6c7086;
+    --ch-ch: #585b70;
+    --ch-m: #fab387;
+    --ch-c: #6c7086;
+    --ch-gd-text: #f38ba8;
+    --ch-gd-bg: #1f1f1f;
+    --ch-gi-text: #a6e3a1;
+    --ch-gi-bg: #1f1f1f;
+}
+
+/* ---- Layout / structure ---- */
+.chroma { color: var(--ch-text); }
+.chroma .err { color: var(--ch-err); }
+.chroma .lnlinks { outline: none; text-decoration: none; color: inherit; }
+.chroma .lntd { vertical-align: top; padding: 0; margin: 0; border: 0; }
+.chroma .lntable { border-spacing: 0; padding: 0; margin: 0; border: 0; }
+.chroma .hl { background-color: var(--ch-hl-bg); }
+.chroma .lnt,
+.chroma .ln { white-space: pre; -webkit-user-select: none; user-select: none; margin-right: 0.4em; padding: 0 0.4em; color: var(--ch-ln); }
+.chroma .line { display: flex; }
+
+/* ---- Keywords ---- */
+.chroma .k, .chroma .kp, .chroma .kr { color: var(--ch-keyword); }
+.chroma .kc { color: var(--ch-kc); }
+.chroma .kd, .chroma .kt { color: var(--ch-err); }
+.chroma .kn { color: var(--ch-kn); }
+
+/* ---- Names ---- */
+.chroma .na { color: var(--ch-na); }
+.chroma .nc, .chroma .no { color: var(--ch-nc); }
+.chroma .nd { color: var(--ch-na); font-weight: bold; }
+.chroma .ni { color: var(--ch-kn); }
+.chroma .ne { color: var(--ch-kc); }
+.chroma .nl { color: var(--ch-nl); }
+.chroma .nn { color: var(--ch-kc); }
+.chroma .py { color: var(--ch-kc); }
+.chroma .nt { color: var(--ch-keyword); }
+.chroma .nb, .chroma .bp { color: var(--ch-nl); }
+.chroma .nv, .chroma .vc, .chroma .vg, .chroma .vi, .chroma .vm { color: var(--ch-nv); }
+.chroma .nf, .chroma .fm { color: var(--ch-na); }
+
+/* ---- Strings ---- */
+.chroma .s, .chroma .sb, .chroma .sc, .chroma .s2,
+.chroma .si, .chroma .sx, .chroma .s1, .chroma .ss { color: var(--ch-s); }
+.chroma .sa { color: var(--ch-err); }
+.chroma .dl, .chroma .se { color: var(--ch-na); }
+.chroma .sd, .chroma .sh { color: var(--ch-sd); }
+.chroma .sr { color: var(--ch-kn); }
+
+/* ---- Numbers ---- */
+.chroma .m, .chroma .mb, .chroma .mf, .chroma .mh,
+.chroma .mi, .chroma .il, .chroma .mo { color: var(--ch-m); }
+
+/* ---- Operators ---- */
+.chroma .o, .chroma .ow { color: var(--ch-nl); font-weight: bold; }
+
+/* ---- Comments ---- */
+.chroma .c, .chroma .cm, .chroma .c1, .chroma .cs, .chroma .cp { color: var(--ch-c); font-style: italic; }
+.chroma .ch { color: var(--ch-ch); font-style: italic; }
+.chroma .cpf { color: var(--ch-c); font-weight: bold; font-style: italic; }
+
+/* ---- Diffs ---- */
+.chroma .gd { color: var(--ch-gd-text); background-color: var(--ch-gd-bg); }
+.chroma .ge { font-style: italic; }
+.chroma .gr { color: var(--ch-err); }
+.chroma .gh, .chroma .gu { color: var(--ch-kc); font-weight: bold; }
+.chroma .gi { color: var(--ch-gi-text); background-color: var(--ch-gi-bg); }
+.chroma .gs { font-weight: bold; }
+.chroma .gt { color: var(--ch-err); }
+.chroma .gl { text-decoration: underline; }

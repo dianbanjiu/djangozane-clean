@@ -1,9 +1,37 @@
-{{- with resources.Get "css/main.css" }}
-  {{- if hugo.IsDevelopment }}
+{{- /* 收集各页面需要的 CSS */ -}}
+{{- $css := slice -}}
+
+{{- with resources.Get "css/main.css" -}}
+  {{- $css = $css | append . -}}
+{{- end -}}
+
+{{- /* 语法高亮仅在单页（文章页）加载 */ -}}
+{{- if .IsPage -}}
+  {{- with resources.Get "css/highlight.css" -}}
+    {{- $css = $css | append . -}}
+  {{- end -}}
+{{- end -}}
+
+{{- /* 搜索样式仅在启用搜索时加载 */ -}}
+{{- if site.Params.search.enabled -}}
+  {{- with resources.Get "css/search.css" -}}
+    {{- $css = $css | append . -}}
+  {{- end -}}
+{{- end -}}
+
+{{- /* 背景图样式仅在设置了背景图时加载 */ -}}
+{{- if site.Params.backgroundImage -}}
+  {{- with resources.Get "css/bg-image.css" -}}
+    {{- $css = $css | append . -}}
+  {{- end -}}
+{{- end -}}
+
+{{- if hugo.IsDevelopment -}}
+  {{- range $css -}}
     <link rel="stylesheet" href="{{ .RelPermalink }}">
-  {{- else }}
-    {{- with . | minify | fingerprint }}
-      <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous">
-    {{- end }}
-  {{- end }}
-{{- end }}
+  {{- end -}}
+{{- else -}}
+  {{- with $css | resources.Concat "css/main.css" | minify | fingerprint -}}
+    <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous">
+  {{- end -}}
+{{- end -}}

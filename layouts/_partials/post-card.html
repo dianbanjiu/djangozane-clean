@@ -1,16 +1,24 @@
+{{- $page := .Page | default . -}}
+{{- $h := .HeadingLevel | default 3 -}}
 <article class="card post-card">
-  <a class="post-card-stretched-link" href="{{ .RelPermalink }}" tabindex="-1" aria-hidden="true"></a>
+  <a class="post-card-stretched-link" href="{{ $page.RelPermalink }}" tabindex="-1" aria-hidden="true"></a>
+  {{ if eq $h 2 }}
+  <h2 class="post-title">
+    <a href="{{ $page.RelPermalink }}">{{ $page.LinkTitle }}</a>
+  </h2>
+  {{ else }}
   <h3 class="post-title">
-    <a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
+    <a href="{{ $page.RelPermalink }}">{{ $page.LinkTitle }}</a>
   </h3>
+  {{ end }}
   <div class="post-meta">
-    {{ partial "datetime.html" . }}
+    {{ partial "datetime.html" $page }}
   </div>
   {{- $excerpt := "" -}}
-  {{- with .Summary -}}
+  {{- with $page.Summary -}}
     {{- $excerpt = . | plainify | truncate 150 -}}
   {{- else -}}
-    {{- with .Content -}}
+    {{- with $page.Content -}}
       {{- $paragraphs := findRE `<p>(.|\n)*?</p>` . -}}
       {{- with index $paragraphs 0 -}}
         {{- $excerpt = . | plainify | truncate 150 -}}
@@ -20,7 +28,7 @@
   {{- with $excerpt -}}
     <div class="post-summary">{{ . }}</div>
   {{- end -}}
-  {{ with .GetTerms "tags" }}
+  {{ with $page.GetTerms "tags" }}
     <div class="tags">
       {{ range . }}
         <a class="tag" href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>

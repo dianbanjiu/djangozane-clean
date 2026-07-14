@@ -1,0 +1,6 @@
+{{- if site.Params.enableRobotsTXT -}}
+User-agent: *
+Allow: /
+
+Sitemap: {{ "sitemap.xml" | absURL }}
+{{- end -}}

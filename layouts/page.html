@@ -22,6 +22,29 @@
       </div>
     {{ end }}
   </article>
+
+  {{- /* ---- JSON-LD Structured Data ---- */ -}}
+  {{- $cover := "" -}}
+  {{- with .Params.cover }}{{ $cover = . | absURL }}{{ end -}}
+  {{- if not $cover }}{{ with site.Params.cover }}{{ $cover = . | absURL }}{{ end }}{{ end -}}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": {{ .Title | jsonify }},
+    "description": {{ (.Description | default (.Summary | plainify | truncate 200)) | jsonify }},
+    {{ with $cover }}"image": {{ . | jsonify }},{{ end }}
+    "datePublished": {{ .Date.Format "2006-01-02T15:04:05-07:00" | jsonify }},
+    {{ with .Lastmod }}"dateModified": {{ .Format "2006-01-02T15:04:05-07:00" | jsonify }},{{ end }}
+    "url": {{ .Permalink | jsonify }},
+    "wordCount": {{ .WordCount | jsonify }},
+    "author": {
+      "@type": "Person",
+      "name": {{ (site.Params.author | default site.Title) | jsonify }}
+    }
+  }
+  </script>
+
   {{- if site.Params.photoswipe.enabled }}
     {{ partial "photoswipe.html" . }}
   {{- end }}

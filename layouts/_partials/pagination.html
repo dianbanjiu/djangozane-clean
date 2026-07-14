@@ -1,6 +1,6 @@
 {{- $pag := .Paginator -}}
 {{- if gt $pag.TotalPages 1 -}}
-  <nav class="pagination" aria-label="pagination">
+  <nav class="pagination" aria-label="{{ i18n "pagination" | default "Pagination" }}">
     {{- if $pag.HasPrev -}}
       <a class="pagination-link pagination-prev" href="{{ $pag.Prev.URL }}" rel="prev" aria-label="{{ i18n "prev" }}">
         <span class="pagination-arrow" aria-hidden="true">←</span>

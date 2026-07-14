@@ -1,0 +1,17 @@
+{{- $headingLevel := .headingLevel | default 2 -}}
+{{- $paginator := .Paginator -}}
+
+{{ if $paginator.Pages }}
+  <section>
+    {{- /* 在文章列表前插入 h2，避免从 h1 直接跳到 h3 */ -}}
+    <h2 class="section-title">{{ i18n "latest_posts" }}</h2>
+    <div class="post-grid">
+      {{ range $paginator.Pages }}
+        {{ partial "post-card.html" (dict "Page" . "HeadingLevel" $headingLevel) }}
+      {{ end }}
+    </div>
+    {{ partial "pagination.html" (dict "Paginator" $paginator) }}
+  </section>
+{{ else }}
+  <p class="empty-state">{{ i18n "no_posts" }}</p>
+{{ end }}

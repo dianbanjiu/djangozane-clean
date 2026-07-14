@@ -1,15 +1,4 @@
 {{ define "main" }}
   {{ partial "hero.html" . }}
-
-  {{ $paginator := .Paginate .Pages }}
-  {{ if $paginator.Pages }}
-    <div class="post-grid">
-      {{ range $paginator.Pages }}
-        {{ partial "post-card.html" . }}
-      {{ end }}
-    </div>
-    {{ partial "pagination.html" $ }}
-  {{ else }}
-    <p class="empty-state">{{ i18n "no_posts" }}</p>
-  {{ end }}
+  {{ partial "post-list.html" (dict "Paginator" (.Paginate .RegularPages) "headingLevel" 3) }}
 {{ end }}
