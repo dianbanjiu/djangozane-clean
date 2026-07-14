@@ -1,7 +1,9 @@
 baseURL = 'https://example.org/'
 locale = 'zh-Hans'
 title = 'DjangoZane'
-paginate = 10
+
+[pagination]
+  pagerSize = 10
 
 [menus]
   [[menus.main]]

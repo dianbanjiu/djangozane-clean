@@ -79,8 +79,10 @@ hugo server -D
 baseURL = 'https://example.org/'
 locale = 'zh-Hans'
 title = '我的博客'
-paginate = 10
 theme = 'djangozane-clean'
+
+[pagination]
+  pagerSize = 10
 
 [menus]
   [[menus.main]]
@@ -141,6 +143,7 @@ theme = 'djangozane-clean'
 
 | 参数 | 说明 | 默认值 |
 | --- | --- | --- |
+| `pagination.pagerSize` | 文章列表每页显示的文章数量 | `10` |
 | `params.logo` | 站点 Logo 图片路径，通常放在站点 `static/` 目录下 | 显示站点标题文字 |
 | `params.favicon` | 站点图标路径 | 无 |
 | `params.backgroundImage` | 全局背景图路径；启用后页面主体区域使用毛玻璃效果提升可读性 | 无 |
@@ -245,7 +248,7 @@ Markdown 中的本地图片会优先通过 Hugo Image Processing 生成多尺寸
     serverURL = 'https://your-waline-server.example.com'
 ```
 
-评论区默认只在 `post` 分区的文章页显示。单篇文章可在 Front Matter 中设置 `comment: false` 关闭评论。
+评论区默认在所有文章页显示。单篇文章可在 Front Matter 中设置 `comment: false` 关闭评论。
 
 Waline 的 `dark` 选项绑定到 `html[data-theme="dark"]`，语言会根据站点 `locale` 自动映射为 `zh-CN`、`zh-TW` 或 `en`。
 
